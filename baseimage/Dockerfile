@@ -7,7 +7,7 @@ MAINTAINER Jay Kamat github@jgkamat.33mail.com
 # Setup apt to be happy with no console input
 ENV DEBIAN_FRONTEND noninteractive
 
-# Use UTF-8
+# Use UTF-8, causes some problems
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 

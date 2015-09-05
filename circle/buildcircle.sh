@@ -3,7 +3,7 @@
 set -e
 
 DIR=$(cd $(dirname $0) ; pwd -P)
-source ${DIR}/../docker_common.sh
+source ${DIR}/../util/docker_common.sh
 
 if [ "$GH_STATUS_TOKEN" = "" ]; then
     echo "Github token not set!"
@@ -13,13 +13,16 @@ fi
 # Entrypiont is needed to preserve exit code
 docker run \
     -v ${CCACHE_DIR:-${HOME}/.ccache}:/home/developer/.ccache \
-    -v ${ROBOCUP_ROOT}:/home/developer/robocup-software \
+    -v ${PROJECT_ROOT}:/home/developer/project \
     -v ${CIRCLE_ARTIFACTS:-/tmp/}:/tmp/build_artifacts \
+	$(${DIR}/../docker_common.sh print_environment_flags) \
     -e CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM} \
     -e CIRCLE_ARTIFACTS=${CIRCLE_ARTIFACTS} \
     -e GH_USER=${GH_USER} \
+    -e GH_STATUS_TOKEN=${GH_STATUS_TOKEN} \
     --entrypoint /bin/bash \
-    ${IMAGE_NAME_BASE}:${SHA_SUM_SETUP} /home/developer/robocup-software/util/docker/maketest.sh ${GH_STATUS_TOKEN}
+    ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} \
+	/home/developer/project/$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/maketest.sh
 
 EXIT=$?
 if [ $EXIT -ne 0 ]; then
@@ -27,4 +30,4 @@ if [ $EXIT -ne 0 ]; then
 fi
 
 # Commit the latest image
-docker commit "$(docker ps -aq | head -n1)" ${IMAGE_NAME_CI}:${SHA_SUM}
+docker commit "$(docker ps -aq | head -n1)" ${IMAGE_NAME_CI}:${COMMIT_SHA}

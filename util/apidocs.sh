@@ -13,7 +13,7 @@ fi
 # Entrypiont is needed to preserve exit code
 docker run \
     -v ${CCACHE_DIR:-${HOME}/.ccache}:/home/developer/.ccache \
-    -v ${ROBOCUP_ROOT}:/home/developer/robocup-software \
+    -v ${PROJECT_ROOT}:/home/developer/project \
     -v ${CIRCLE_ARTIFACTS:-/tmp/}:/tmp/build_artifacts \
     -e CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM} \
     -e CIRCLE_ARTIFACTS=${CIRCLE_ARTIFACTS} \
@@ -21,4 +21,4 @@ docker run \
     -e GIT_EMAIL=${GIT_EMAIL} \
     -e GH_TOKEN=${GH_TOKEN} \
     --entrypoint /bin/bash \
-    ${IMAGE_NAME_BASE}:${SHA_SUM_SETUP} /home/developer/robocup-software/autoupdate-docs.sh
+    ${IMAGE_NAME_BASE}:${CACHING_SHA:-latest} "bash -c cd /home/developer/project && $API_AUTOUPDATE_COMMAND"

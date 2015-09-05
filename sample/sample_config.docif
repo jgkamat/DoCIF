@@ -4,9 +4,17 @@
 #
 # This is just a shell file that is sourced by all the DoCIF scripts.
 
-# A docker baseimage to use for caching
+# A docker baseimage repostiory
 # REQUIRED, as of now.
 BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
+
+# The github repository location
+# REQUIRED for API status.
+GITHUB_REPO='jgkamat/vipaint'
+
+# The url to point to when a status check is pending.
+# Optional, will point to https://github.com/jgkamat/DoCIF if empty.
+PENDING_URL="https://github.com/jgkamat/DoCIF"
 
 ############################## Variable Names ##################################
 
@@ -55,13 +63,13 @@ ENV_VARS+=("GH_PUSH_TOKEN")  # To be used by autoupdating script
 # COMMAND; SHORT_NAME; DESCRIPTION
 TEST_COMMANDS=()
 TEST_COMMANDS+=("make;compile;A test to see if the code compiles")
-TEST_COMMANDS+=("make test-cpp;test-cpp;A test to see if the code passes cpp tests")
+TEST_COMMANDS+=("make test-cpp;test-cpp;A test to see if the code passes cpp tests") #
 
 # REQUIRED: Clean command. Cleans the build files so there is no way the previous build can interfere.
 CLEAN_COMMAND="make clean"
 # Other options are `gradle clean`, `mvn clean`, or `rm -rf build`
 
-# API updating script.
+# API updating command/script.
 # API_AUTOUPDATE_COMMAND="./autoupdate-api"
 
 ################################################################################

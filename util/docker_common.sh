@@ -6,8 +6,6 @@ set -e
 COMMON_DIR=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/
 DOCIF_ROOT=$(cd ${COMMON_DIR} && git rev-parse --show-toplevel)
 
-# TODO replace with project root
-ROBOCUP_ROOT="${COMMON_DIR}/../../"
 # Get sha sum
 # SHA_SUM_SETUP="$(${ROBOCUP_ROOT}/util/docker/getsetupsha.sh)"
 # SHA_SUM="$(git rev-parse HEAD)"
@@ -79,10 +77,16 @@ get_setup_sha() {
 	cat ${SETUP_SHA_FILES[*]} | sha256sum | awk '{print $1}'
 }
 
+get_commit_sha() {
+	cd ${PROJECT_ROOT}
+	echo "$(git rev-parse HEAD)"
+}
+
 # Source config file!
 source_config
 CACHING_SHA="$(get_setup_sha)"
-
+COMMIT_SHA="$(get_commit_sha)"
+#
 check_variable "TEST_COMMANDS"
 check_variable "CLEAN_COMMAND"
 
@@ -101,6 +105,8 @@ standardize_env_vars() {
 	DOCKER_USERNAME="$(eval echo "\$${DOCKER_USER_VAR}")"
 	GH_STATUS_TOKEN="$(eval echo "\$${GH_STATUS_TOKEN_VAR}")"
 	GH_USERNAME="$(eval echo "\$${GH_USER_VAR}")"
+
+	PENGING_URL=${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}
 }
 
 standardize_env_vars
