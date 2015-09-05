@@ -75,9 +75,15 @@ get_setup_sha() {
 	cat ${SETUP_SHA_FILES[*]} | sha256sum | awk '{print $1}'
 }
 
+# Source config file!
 source_config
-
 CACHING_SHA="$(get_setup_sha)"
+
+print_environment_flags() {
+	for i in ${ENV_VARS[@]}; do
+		echo "-e ${i}=\${$i} \"
+	done
+}
 
 # Run commands if requested
 while (( ${#} )); do
@@ -86,6 +92,8 @@ while (( ${#} )); do
 	    get_repo_root; shift 1 ;;
 	run_in_project )
 	    run_in_project ${2}; shift 2 ;;
+	print_environment_flags )
+	    print_environment_flags; shift 1 ;;
 	* )
 	    usage >&2; exit 1;;
     esac
