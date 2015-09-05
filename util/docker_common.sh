@@ -57,9 +57,10 @@ source_config() {
 	cd ${PROJECT_DIR}
 	if [ -f "config.docif" ]; then
 		source config.docif
-	elif [ -n "$(ls "*.docif" | head -n1)" ]; then
-		source "$(ls "*.docif" | head -n1)"
+	elif [ -n "$(ls *.docif | head -n1)" ]; then
+		source "$(ls *.docif | head -n1)"
 	else
+		ls
 		echo "[ERR] No docif config could be found! Exiting!" >&2
 		exit 1
 	fi
@@ -71,6 +72,13 @@ get_setup_sha() {
 		return 0
 	fi
 
+	for i in ${SETUP_SHA_FILES[@]}; do
+		if ! [ -f "$i" ]; then
+			echo "[ERR] $i was not a file, cannot SHA. Exiting" >&2
+			exit 1
+		fi
+	done
+
 	cd ${PROJECT_DIR}
 	cat ${SETUP_SHA_FILES[*]} | sha256sum | awk '{print $1}'
 }
@@ -81,9 +89,22 @@ CACHING_SHA="$(get_setup_sha)"
 
 print_environment_flags() {
 	for i in ${ENV_VARS[@]}; do
-		echo "-e ${i}=\${$i} \"
+		printf " -e ${i}=\${$i} "
 	done
+	printf "\n"
 }
+
+# This converts our secrets to standard variables we can use throughout DoCIF
+standardize_env_vars() {
+	# Any of these could be empty if you wanted, that turns off features though.
+	DOCKER_PASSWORD="$(eval echo "\$${DOCKER_PASSWORD_VAR}")"
+	DOCKER_EMAIL="$(eval echo "\$${DOCKER_EMAIL_VAR}")"
+	DOCKER_USERNAME="$(eval echo "\$${DOCKER_USER_VAR}")"
+	GH_STATUS_TOKEN="$(eval echo "\$${GH_STATUS_TOKEN_VAR}")"
+	GH_USERNAME="$(eval echo "\$${GH_USER_VAR}")"
+}
+
+standardize_env_vars
 
 # Run commands if requested
 while (( ${#} )); do

@@ -27,7 +27,7 @@ SETUP_COMMAND="apt-get update && apt get upgrade"
 # Include the setup script itself, as well as any dependency files
 # Leaving this blank will turn off caching
 SETUP_SHA_FILES=()
-SETUP_SHA_FILES+=("./util/ubuntu-setup")
+# SETUP_SHA_FILES+=("./util/ubuntu-setup")
 
 # Status token is used for updating status
 GH_STATUS_TOKEN_VAR="GH_STATUS"
