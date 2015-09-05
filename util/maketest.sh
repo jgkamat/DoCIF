@@ -13,51 +13,51 @@ PENDING=false
 SHORTNAMES=( )
 
 start_pending() {
-    SHORTNAME="$1"
-    >/dev/null curl -s -u $USER:$TOKEN \
-        -X POST https://api.github.com/repos/robojackets/robocup-software/statuses/${SHA_SUM} \
-        -H "Content-Type: application/json" \
-        -d '{"state":"pending", "description": "This check is pending. Please wait.", "context": '"\"circle/$SHORTNAME\""', "target_url": "http://www.robojackets.org/"}'
+	SHORTNAME="$1"
+	>/dev/null curl -s -u $USER:$TOKEN \
+	 -X POST https://api.github.com/repos/robojackets/robocup-software/statuses/${SHA_SUM} \
+	 -H "Content-Type: application/json" \
+	 -d '{"state":"pending", "description": "This check is pending. Please wait.", "context": '"\"circle/$SHORTNAME\""', "target_url": "http://www.robojackets.org/"}'
 }
 
 # A function to run a command. Takes in a command name, shortname and description.
 ci_task() {
-    CMD="$1"
-    SHORTNAME="$2"
-    DESCRIPTION="$3"
+	CMD="$1"
+	SHORTNAME="$2"
+	DESCRIPTION="$3"
 
-    SHORTNAMES+=("${SHORTNAME}")
+	SHORTNAMES+=("${SHORTNAME}")
 
-    if [ "$PENDING" = "true" ]; then
-        return 0
-    fi
+	if [ "$PENDING" = "true" ]; then
+		return 0
+	fi
 
-    ${CMD} 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
-    if [ "${PIPESTATUS[0]}" = "0" ]; then
-        >/dev/null curl -s -u $USER:$TOKEN \
-            -X POST https://api.github.com/repos/robojackets/robocup-software/statuses/${SHA_SUM} \
-            -H "Content-Type: application/json" \
-            -d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
-    else
-        >/dev/null curl -s -u $USER:$TOKEN \
-            -X POST https://api.github.com/repos/robojackets/robocup-software/statuses/${SHA_SUM} \
-            -H "Content-Type: application/json" \
-            -d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
-        SUCCESS=false >/dev/null
-    fi
+	${CMD} 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
+	if [ "${PIPESTATUS[0]}" = "0" ]; then
+		>/dev/null curl -s -u $USER:$TOKEN \
+		 -X POST https://api.github.com/repos/robojackets/robocup-software/statuses/${SHA_SUM} \
+		 -H "Content-Type: application/json" \
+		 -d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+	else
+		>/dev/null curl -s -u $USER:$TOKEN \
+		 -X POST https://api.github.com/repos/robojackets/robocup-software/statuses/${SHA_SUM} \
+		 -H "Content-Type: application/json" \
+		 -d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		SUCCESS=false >/dev/null
+	fi
 }
 
 if [ "$1" = "" ]; then
-    echo "Token needed to update statuses"
-    exit 1
+	echo "Token needed to update statuses"
+	exit 1
 elif [ "$1" = "--pending" -a "$2" = "" ]; then
-    echo "Token needed to update statuses"
-    exit 1
+	echo "Token needed to update statuses"
+	exit 1
 elif [ "$1" = "--pending" -a "$2" != "" ]; then
-    TOKEN="$2"
-    PENDING=true
+	TOKEN="$2"
+	PENDING=true
 else
-    TOKEN="$1"
+	TOKEN="$1"
 fi
 
 # Go to root so we can make.
@@ -76,9 +76,9 @@ ci_task 'make checkstyle' 'style' 'A check to see if style passes'
 
 # This script needs to be run prior with the --pending flag if you want to see pending flags
 if [ "$PENDING" = "true" ]; then
-    for i in ${SHORTNAMES[*]}; do
-        start_pending ${i}
-    done
+	for i in ${SHORTNAMES[*]}; do
+		start_pending ${i}
+	done
 fi
 
 $SUCCESS

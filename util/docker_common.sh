@@ -41,7 +41,7 @@ run_in_project() {
 
 # Checks to see if a variable is empty or not
 check_variable() {
-    if [ -z "${${1}}" ]; then
+    if [ -z "$(eval echo \$${1})" ]; then
 		echo "[ERR] $1 was missing from your config file. DoCIF cannot continue." >&2
 		exit 1
 	fi
