@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# A sample config file for DoCIF
+
+BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
+
+
+# Variable Names
+# These are the variables that will hold secrets and such.
+# In this example, DOCKER_PASS needs to have the docker hub password
+# This can be done through the CircleCi GUI or Travis CI secrets
+DOCKER_PASSWORD_VAR="DOCKER_PASS"
+DOCKER_EMAIL_VAR="DOCKER_EMAIL"
+DOCKER_USER_VAR="DOCKER_USER"
+
+# This would be insecure
+# DOCKER_EMAIL="spam@gmail.com"
+
+
+# Commands
+
+# The script to set up the environment, by default ubuntu.
+SETUP_COMMAND="apt-get update && apt get upgrade"
+# SETUP_COMMAND="./ubuntu-setup-script"
+
+# Status token is used for updating status
+GH_STATUS_TOKEN_VAR="GH_STATUS"
+
+# Environmental variables to make available to the build environment
+ENV_VARS=()
+ENV_VARS+=("GH_PUSH_TOKEN")
+
+# Commands to run when testing. Each index will have it's own status token
+# Commands are in this format
+# COMMAND; SHORT_NAME; DESCRIPTION
+TEST_COMMANDS=()
+TEST_COMMANDS+=("make;compile;A test to see if the code compiles")
+TEST_COMMANDS+=("make test-cpp;test-cpp;A test to see if the code passes cpp tests")
+
+# API updating script.
+API_AUTOUPDATE_SCRIPT=""
