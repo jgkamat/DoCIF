@@ -3,7 +3,7 @@
 set -e
 
 DIR=$(cd $(dirname $0) ; pwd -P)
-source ${DIR}/../docker_common.sh
+source ${DIR}/docker_common.sh
 
 if [ "$GH_TOKEN" = "" ]; then
     echo "Github token not set!"

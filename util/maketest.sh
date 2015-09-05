@@ -2,7 +2,7 @@
 # Runs tests and reports on them to github
 
 DIR=$(cd $(dirname $0) ; pwd -P)
-source ${DIR}/util/docker_common.sh
+source ${DIR}/docker_common.sh
 
 # Get sha sum
 USER="${GH_USER:-georgeburdell}"

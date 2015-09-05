@@ -65,6 +65,20 @@ source_config() {
 	fi
 }
 
+get_setup_sha() {
+	if [ -z "${SETUP_SHA_FILES[*]}" ]; then
+		echo "[WARN] No SHA Files found, caching will not take place" >&2
+		return 0
+	fi
+
+	cd ${PROJECT_DIR}
+	cat ${SETUP_SHA_FILES[*]} | sha256sum | awk '{print $1}'
+}
+
+source_config
+
+CACHING_SHA="$(get_setup_sha)"
+
 # Run commands if requested
 while (( ${#} )); do
     case "${1}" in
