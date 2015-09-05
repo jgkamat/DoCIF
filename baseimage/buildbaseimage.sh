@@ -10,10 +10,10 @@ if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositor
 	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
 else
 	# The tag does not exist, let's build it!
-	docker build -t ${BASEIMAGE_REPO}:in_progress  -f ${ROBOCUP_ROOT}/util/docker/baseimage/Dockerfile .
+	docker build -t ${BASEIMAGE_REPO}:in_progress  -f ${DOCIF_ROOT}/baseimage/Dockerfile .
 	docker run \
 		   --entrypoint="/bin/bash" \
-		   -v ${ROBOCUP_ROOT}:/home/developer/robocup-software ${BASEIMAGE_REPO}:in_progress \
+		   -v ${PROJECT_ROOT}:/home/developer/project ${BASEIMAGE_REPO}:in_progress \
 		   -c './util/ubuntu-setup --yes --firmware && sudo apt-get clean'
 
 	docker commit "$(docker ps -aq | head -n1)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}

@@ -4,7 +4,7 @@
 set -e
 
 COMMON_DIR=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/
-DOCIF_DIR=$(cd ${COMMON_DIR} && git rev-parse --show-toplevel)
+DOCIF_ROOT=$(cd ${COMMON_DIR} && git rev-parse --show-toplevel)
 
 # TODO replace with project root
 ROBOCUP_ROOT="${COMMON_DIR}/../../"
@@ -22,7 +22,7 @@ usage() {
 # TODO check to see if outside repo actually exists
 get_repo_root() {
     # Get outside of DoCIF
-    cd ${DOCIF_DIR}/../
+    cd ${DOCIF_ROOT}/../
 
 	if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
 		echo "[ERR] DoCIF is not within a git repository and cannot continue." >&2
@@ -32,10 +32,10 @@ get_repo_root() {
     echo $(git rev-parse --show-toplevel)
 }
 
-PROJECT_DIR="$(get_repo_root)"
+PROJECT_ROOT="$(get_repo_root)"
 
 run_in_project() {
-    cd ${PROJECT_DIR}
+    cd ${PROJECT_ROOT}
     $@
 }
 
@@ -47,20 +47,16 @@ check_variable() {
 	fi
 }
 
-# Checks to see if mandatory variables are present.
-check_inputs() {
-	check_variable TEST_COMMANDS
-}
-
 # Source docif config
 source_config() {
-	cd ${PROJECT_DIR}
+	cd ${PROJECT_ROOT}
 	if [ -f "config.docif" ]; then
 		source config.docif
 	elif [ -n "$(ls *.docif | head -n1)" ]; then
 		source "$(ls *.docif | head -n1)"
 	else
 		ls
+
 		echo "[ERR] No docif config could be found! Exiting!" >&2
 		exit 1
 	fi
@@ -79,13 +75,16 @@ get_setup_sha() {
 		fi
 	done
 
-	cd ${PROJECT_DIR}
+	cd ${PROJECT_ROOT}
 	cat ${SETUP_SHA_FILES[*]} | sha256sum | awk '{print $1}'
 }
 
 # Source config file!
 source_config
 CACHING_SHA="$(get_setup_sha)"
+
+check_variable "TEST_COMMANDS"
+check_variable "CLEAN_COMMAND"
 
 print_environment_flags() {
 	for i in ${ENV_VARS[@]}; do
