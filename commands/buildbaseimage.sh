@@ -29,7 +29,10 @@ else
 			echo "[WARN] Docker login FAILED. This most likeley means invalid credentials Exiting..." >&2
 			exit 1
 		fi
-		docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+
+		if [ "$PUSH_BASEIMAGE" = "true" ]; then
+			docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+		fi
 	else
 		echo "[WARN] Docker credentials not found. Skipping push." >&2
 	fi

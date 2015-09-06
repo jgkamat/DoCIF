@@ -7,6 +7,7 @@
 # A docker baseimage repostiory
 # REQUIRED, as of now.
 BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
+PUSH_BASEIMAGE=true
 
 # The github repository location, for sendings status updates to
 # REQUIRED AS OF NOW
