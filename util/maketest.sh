@@ -69,8 +69,7 @@ cd ${PROJECT_ROOT}
 
 # Clean
 sh -c "$CLEAN_COMMAND"
-# TODO add this back
-# git submodule update --init
+git submodule update --init
 for i in "${CACHE_DIRECTORIES[@]}"; do
 	# Use ${HOME} in this case
 	i="$(echo $i | sed 's/~/${HOME}/')"
