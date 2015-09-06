@@ -14,32 +14,32 @@ DOCIF_ROOT=$(cd ${COMMON_DIR} && git rev-parse --show-toplevel)
 # IMAGE_NAME_BASE="robojackets/robocup-baseimage"
 
 usage() {
-    echo "An internal error occured. Please report this."
+	echo "An internal error occured. Please report this."
 }
 
 # TODO check to see if outside repo actually exists
 get_repo_root() {
-    # Get outside of DoCIF
-    cd ${DOCIF_ROOT}/../
+	# Get outside of DoCIF
+	cd ${DOCIF_ROOT}/../
 
 	if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
 		echo "[ERR] DoCIF is not within a git repository and cannot continue." >&2
 		exit 1
 	fi
 
-    echo $(git rev-parse --show-toplevel)
+	echo $(git rev-parse --show-toplevel)
 }
 
 PROJECT_ROOT="$(get_repo_root)"
 
 run_in_project() {
-    cd ${PROJECT_ROOT}
-    $@
+	cd ${PROJECT_ROOT}
+	$@
 }
 
 # Checks to see if a variable is empty or not
 check_variable() {
-    if [ -z "$(eval echo \$${1})" ]; then
+	if [ -z "$(eval echo \$${1})" ]; then
 		echo "[ERR] $1 was missing from your config file. DoCIF cannot continue." >&2
 		exit 1
 	fi
@@ -121,16 +121,16 @@ standardize_env_vars
 
 # Run commands if requested
 while (( ${#} )); do
-    case "${1}" in
-	get_repo_root )
-	    get_repo_root; shift 1 ;;
-	run_in_project )
-	    run_in_project ${2}; shift 2 ;;
-	print_environment_flags )
-	    print_environment_flags; shift 1 ;;
-	print_cache_flags )
-	    print_cache_flags; shift 1 ;;
-	* )
-	    usage >&2; exit 1;;
-    esac
+	case "${1}" in
+		get_repo_root )
+			get_repo_root; shift 1 ;;
+		run_in_project )
+			run_in_project ${2}; shift 2 ;;
+		print_environment_flags )
+			print_environment_flags; shift 1 ;;
+		print_cache_flags )
+			print_cache_flags; shift 1 ;;
+		* )
+			usage >&2; exit 1;;
+	esac
 done
