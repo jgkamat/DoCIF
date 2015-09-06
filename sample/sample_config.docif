@@ -65,8 +65,8 @@ ENV_VARS+=("GH_PUSH_TOKEN")  # To be used by autoupdating script
 # Commands are in this format
 # COMMAND; SHORT_NAME; DESCRIPTION
 TEST_COMMANDS=()
-TEST_COMMANDS+=("make;compile;A test to see if the code compiles")
-TEST_COMMANDS+=("make test-cpp;test-cpp;A test to see if the code passes cpp tests") #
+TEST_COMMANDS+=( 'make;compile;A test to see if the code compiles' )
+TEST_COMMANDS+=( 'make test-cpp;test-cpp;A test to see if the code passes cpp tests' )
 
 # REQUIRED: Clean command. Cleans the build files so there is no way the previous build can interfere.
 CLEAN_COMMAND="make clean || true"

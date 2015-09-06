@@ -13,9 +13,9 @@ docker run \
 	   $(${DIR}/../util/docker_common.sh print_environment_flags) \
 	   -e CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM} \
 	   -e CIRCLE_ARTIFACTS=${CIRCLE_ARTIFACTS} \
-	   -e GH_USERNAME=${GH_USERNAME} \
-	   -e GH_EMAIL=${GH_EMAIL} \
-	   -e GH_STATUS_TOKEN=${GH_STATUS_TOKEN} \
+	   -e ${GH_USER_VAR}=${GH_USERNAME} \
+	   -e ${GH_EMAIL_VAR}=${GH_EMAIL} \
+	   -e ${GH_STATUS_TOKEN_VAR}=${GH_STATUS_TOKEN} \
 	   --entrypoint /bin/bash \
 	   ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} \
 	   /home/developer/project/$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/maketest.sh

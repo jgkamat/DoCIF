@@ -19,7 +19,7 @@ docker run \
 	   -e CIRCLE_BUILD_NUM=${CIRCLE_BUILD_NUM} \
 	   -e CIRCLE_ARTIFACTS=${CIRCLE_ARTIFACTS} \
 	   -e GH_USERNAME=${GH_USERNAME} \
-	   -e GH_EMAIL=${GH_EMAIL} \
-	   -e GH_STATUS_TOKEN=${GH_STATUS_TOKEN} \
+	   -e ${GH_EMAIL_VAR}=${GH_EMAIL} \
+	   -e ${GH_STATUS_TOKEN_VAR}=${GH_STATUS_TOKEN} \
 	   --entrypoint /bin/bash \
 	   ${IMAGE_NAME_BASE}:${CACHING_SHA:-latest} "bash -c cd /home/developer/project && $API_AUTOUPDATE_COMMAND"

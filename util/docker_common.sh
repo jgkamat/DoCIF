@@ -39,7 +39,7 @@ run_in_project() {
 
 # Checks to see if a variable is empty or not
 check_variable() {
-	if [ -z "$(eval echo \$${1})" ]; then
+	if [ -z "$(eval echo "\$${1}")" ]; then
 		echo "[ERR] $1 was missing from your config file. DoCIF cannot continue." >&2
 		exit 1
 	fi
@@ -53,8 +53,6 @@ source_config() {
 	elif [ -n "$(ls *.docif | head -n1)" ]; then
 		source "$(ls *.docif | head -n1)"
 	else
-		ls
-
 		echo "[ERR] No docif config could be found! Exiting!" >&2
 		exit 1
 	fi
@@ -66,7 +64,7 @@ get_setup_sha() {
 		return 0
 	fi
 
-	for i in ${SETUP_SHA_FILES[@]}; do
+	for i in "${SETUP_SHA_FILES[@]}"; do
 		if ! [ -f "$i" ]; then
 			echo "[ERR] $i was not a file, cannot SHA. Exiting" >&2
 			exit 1
@@ -86,19 +84,19 @@ get_commit_sha() {
 source_config
 CACHING_SHA="$(get_setup_sha)"
 COMMIT_SHA="$(get_commit_sha)"
-#
+
 check_variable "TEST_COMMANDS"
 check_variable "CLEAN_COMMAND"
 
 print_environment_flags() {
-	for i in ${ENV_VARS[@]}; do
+	for i in "${ENV_VARS[@]}"; do
 		printf " -e ${i}=\${$i} "
 	done
 	printf "\n"
 }
 
 print_cache_flags() {
-	for i in ${CACHE_DIRECTORIES[@]}; do
+	for i in "${CACHE_DIRECTORIES[@]}"; do
 		printf " -v $(echo $i | sed 's/~/${HOME}/'):$(echo $i | sed 's%~%/home/developer%') "
 	done
 	printf "\n"
