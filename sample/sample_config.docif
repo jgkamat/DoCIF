@@ -8,8 +8,8 @@
 # REQUIRED, as of now.
 BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
 
-# The github repository location
-# REQUIRED for API status.
+# The github repository location, for sendings status updates to
+# REQUIRED AS OF NOW
 GITHUB_REPO='jgkamat/vipaint'
 
 # The url to point to when a status check is pending.
@@ -47,7 +47,8 @@ CACHE_DIRECTORIES+=('~/.ccache')
 ################################# COMMANDS #####################################
 
 # The script to set up the environment, by default ubuntu.
-SETUP_COMMAND="apt-get update && apt get upgrade"
+# YOU WILL NEED TO USE SUDO TO GET ROOT PRIVLEGES HERE
+SETUP_COMMAND="sudo apt-get update"
 # SETUP_COMMAND="./ubuntu-setup-script"
 
 # DOCIF can cache baseimages, if you give it files that will force a rebuild if changed.
@@ -68,7 +69,7 @@ TEST_COMMANDS+=("make;compile;A test to see if the code compiles")
 TEST_COMMANDS+=("make test-cpp;test-cpp;A test to see if the code passes cpp tests") #
 
 # REQUIRED: Clean command. Cleans the build files so there is no way the previous build can interfere.
-CLEAN_COMMAND="make clean"
+CLEAN_COMMAND="make clean || true"
 # Other options are `gradle clean`, `mvn clean`, or `rm -rf build`
 
 # API updating command/script.

@@ -11,10 +11,14 @@ if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositor
 else
 	# The tag does not exist, let's build it!
 	docker build -t ${BASEIMAGE_REPO}:in_progress  -f ${DOCIF_ROOT}/commands/Dockerfile .
-	docker run \
-		   --entrypoint="/bin/bash" \
-		   -v ${PROJECT_ROOT}:/home/developer/project ${BASEIMAGE_REPO}:in_progress \
-		   -c './util/ubuntu-setup --yes --firmware && sudo apt-get clean'
+	if [ -n "$SETUP_COMMAND" ]; then
+		docker run \
+			   --entrypoint="/bin/bash" \
+			   -v ${PROJECT_ROOT}:/home/developer/project ${BASEIMAGE_REPO}:in_progress \
+			   -c "${SETUP_COMMAND}"
+	else
+		echo "[WARN] No setup command was supplied. Using bare baseimage environment." >&2
+	fi
 
 	docker commit "$(docker ps -aq | head -n1)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
 

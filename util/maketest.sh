@@ -1,6 +1,7 @@
 #!/bin/bash
 # Runs tests and reports on them to github
 
+
 DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/docker_common.sh
 

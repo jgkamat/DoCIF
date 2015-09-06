@@ -5,11 +5,6 @@ set -e
 DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/../util/docker_common.sh
 
-if [ "$GH_STATUS_TOKEN" = "" ]; then
-	echo "Github token not set!"
-	exit 1
-fi
-
 # Entrypiont is needed to preserve exit code
 docker run \
 	   $(${DIR}/../util/docker_common.sh print_cache_flags) \
