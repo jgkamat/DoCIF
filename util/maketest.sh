@@ -68,6 +68,8 @@ cd ${PROJECT_ROOT}
 sh -c "$CLEAN_COMMAND"
 git submodule update --init
 for i in ${CACHE_DIRECTORIES[@]}; do
+	# Use ${HOME} in this case
+	i="$(echo $i | sed 's/~/${HOME}/')"
 	sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
 done
 

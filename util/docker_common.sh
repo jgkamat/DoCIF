@@ -97,6 +97,13 @@ print_environment_flags() {
 	printf "\n"
 }
 
+print_cache_flags() {
+	for i in ${CACHE_DIRECTORIES[@]}; do
+		printf " -v $(echo $i | sed 's/~/${HOME}/'):$(echo $i | sed 's%~%/home/developer%') "
+	done
+	printf "\n"
+}
+
 # This converts our secrets to standard variables we can use throughout DoCIF
 standardize_env_vars() {
 	# Any of these could be empty if you wanted, that turns off features though.
@@ -105,6 +112,7 @@ standardize_env_vars() {
 	DOCKER_USERNAME="$(eval echo "\$${DOCKER_USER_VAR}")"
 	GH_STATUS_TOKEN="$(eval echo "\$${GH_STATUS_TOKEN_VAR}")"
 	GH_USERNAME="$(eval echo "\$${GH_USER_VAR}")"
+	GH_EMAIL="$(eval echo "\$${GH_EMAIL_VAR}")"
 
 	PENGING_URL=${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}
 }
@@ -120,6 +128,8 @@ while (( ${#} )); do
 	    run_in_project ${2}; shift 2 ;;
 	print_environment_flags )
 	    print_environment_flags; shift 1 ;;
+	print_cache_flags )
+	    print_cache_flags; shift 1 ;;
 	* )
 	    usage >&2; exit 1;;
     esac

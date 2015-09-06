@@ -1,4 +1,4 @@
-# Use phusion/baseimage if problems arise
+# You can change this to any version of ubuntu with little consequence
 FROM ubuntu:14.04
 MAINTAINER Jay Kamat github@jgkamat.33mail.com
 
@@ -7,7 +7,7 @@ MAINTAINER Jay Kamat github@jgkamat.33mail.com
 # Setup apt to be happy with no console input
 ENV DEBIAN_FRONTEND noninteractive
 
-# Use UTF-8, causes some problems
+# Use UTF-8, fixes some hard to debug issues
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 

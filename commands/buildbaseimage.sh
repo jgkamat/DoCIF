@@ -3,14 +3,14 @@
 set -e
 
 DIR=$(cd $(dirname $0) ; pwd -P)
-source ${DIR}/../docker_common.sh
+source ${DIR}/../util/docker_common.sh
 
 if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositories/${BASEIMAGE_REPO}/tags |  fgrep -q "\"name\": \"${CACHING_SHA}\""; then
 	# The tag currently exists, and can be pulled
 	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
 else
 	# The tag does not exist, let's build it!
-	docker build -t ${BASEIMAGE_REPO}:in_progress  -f ${DOCIF_ROOT}/baseimage/Dockerfile .
+	docker build -t ${BASEIMAGE_REPO}:in_progress  -f ${DOCIF_ROOT}/commands/Dockerfile .
 	docker run \
 		   --entrypoint="/bin/bash" \
 		   -v ${PROJECT_ROOT}:/home/developer/project ${BASEIMAGE_REPO}:in_progress \

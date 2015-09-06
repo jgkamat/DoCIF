@@ -31,15 +31,17 @@ DOCKER_USER_VAR="DOCKER_USER"
 
 # Status token is used for updating status
 GH_STATUS_TOKEN_VAR="GH_STATUS"
-# Username of the Status Token
+# Variable holing the username of the Status Token
 GH_USER_VAR="GH_USER"
+# Variable holing the email of the Status Token
+GH_EMAIL_VAR="GH_EMAIL"
 
 # Cache directories, not required.
 # Directories to link to the docker container for each build. Add to circle.yml
 # for caching on their servers
-# DO NOT USE ~, USE ${HOME} INSTEAD (IN SINGLE QUOTES).
+# YOU MUST USE ~ IN YOUR PATH, SO WE KNOW WHERE TO LINK TO INSIDE THE CONTAINER.
 CACHE_DIRECTORIES=()
-CACHE_DIRECTORIES+=('${HOME}/.ccache')
+CACHE_DIRECTORIES+=('~/.ccache')
 
 
 ################################# COMMANDS #####################################
