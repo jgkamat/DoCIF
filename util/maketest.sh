@@ -82,7 +82,7 @@ done
 
 # This script needs to be run prior with the --pending flag if you want to see pending flags
 if [ "$PENDING" = "true" ]; then
-	for i in "${SHORTNAMES[*]}"; do
+	for i in "${SHORTNAMES[@]}"; do
 		start_pending ${i}
 	done
 fi

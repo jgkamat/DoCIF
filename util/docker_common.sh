@@ -117,18 +117,21 @@ standardize_env_vars() {
 
 standardize_env_vars
 
-# Run commands if requested
-while (( ${#} )); do
-	case "${1}" in
-		get_repo_root )
-			get_repo_root; shift 1 ;;
-		run_in_project )
-			run_in_project ${2}; shift 2 ;;
-		print_environment_flags )
-			print_environment_flags; shift 1 ;;
-		print_cache_flags )
-			print_cache_flags; shift 1 ;;
-		* )
-			usage >&2; exit 1;;
-	esac
-done
+# Don't run things if being sourced
+if $(echo ${0} | grep -q "bash"); then
+	# Run commands if requested
+	while (( ${#} )); do
+		case "${1}" in
+			get_repo_root )
+				get_repo_root; shift 1 ;;
+			run_in_project )
+				run_in_project ${2}; shift 2 ;;
+			print_environment_flags )
+				print_environment_flags; shift 1 ;;
+			print_cache_flags )
+				print_cache_flags; shift 1 ;;
+			* )
+				usage >&2; exit 1;;
+		esac
+	done
+fi
