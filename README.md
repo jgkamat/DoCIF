@@ -1,7 +1,7 @@
 # DoCIF
 Docker Continuous Integration Framework - A framework for easily testing your project with Docker!
 
-#WARNING: THIS PROJECT IS STILL UNDER HEAVY DEVELOPMENT, MOST FEATURES ARE INCOMPLETE OR NON-FUNCTIONAL. DO NOT USE THIS IN ANY IMPORTANT ENVIRONMENT UNTIL THE FIRST STABLE VERSION OF DoCIF IS RELEASED.
+#CAUTION: THIS PROJECT IS IN THE TESTING PHASE, MOST FEATURES ARE UNSTABLE OR NON-EXISTENT. DO NOT USE THIS IN ANY IMPORTANT ENVIRONMENT UNTIL THE FIRST STABLE VERSION OF DoCIF IS RELEASED.
 
 DoCIF is a framework making it easy to test your project with Docker. You only need to configure DoCIF, and DoCIF will handle building docker images, caching using the docker hub, and github status updates!
 
@@ -12,6 +12,7 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
 * Git managed project and `git 2.0+`
 * [Docker](https://www.docker.com) installed on your system or continuous integration
 * Bash on a POSIX (preferrably GNU) system.
+* CircleCi Continuous Integration. The features included in DoCIF take adavantage of it's features, such as artifact deployment, and caching.
 
 ## Setup
 Setup of DoCIF is designed to be easy, assuming you know how to set up your project on a linux machine!
@@ -20,6 +21,7 @@ Setup of DoCIF is designed to be easy, assuming you know how to set up your proj
 optional, some must be changed.
 2. Add DoCIF as a submodule to your repository.
 3. Add a circle.yml file to the base of your repository. A sample one, which you can copy paste if you don't already have a circle config, can be found in the samples directory. If you already have a circle config, you may want to merge them manually, unless you want to use only DoCIF.
+4. Set CircleCi to use your Environment Variable Secrets in the online settings, and set parallelism to 1x (allows for 4 concurrent builds).
 
 ## License
 DoCIF is licensed under the GNU LGPLv3. In an incomplete summary, this means you can use DoCIF with any project (even nonfree ones :cry:), but if you mod DoCIF itself, you must license the derivative work under the LGPLv3 or the GPLv3. See the included LICENSE file for details.
