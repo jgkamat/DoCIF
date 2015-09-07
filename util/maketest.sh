@@ -76,7 +76,7 @@ for i in "${CACHE_DIRECTORIES[@]}"; do
 		i="$(echo $i | sed 's/~/${HOME}/')"
 		sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
 	else
-		echo "[WARN] Cache directory $i not found!"
+		echo "[WARN] Cache directory $i not found!" >&2
 	fi
 done
 
