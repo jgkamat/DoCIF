@@ -20,7 +20,7 @@ Setup of DoCIF is designed to be easy, assuming you know how to set up your proj
 1. Set up a config.docif file in the root of your repository. See [samples](./sample/sample-config.docif) for one. You should be able to copy paste this into your project and tweak the variables to your liking. While most options are
 optional, some must be changed.
 2. Add DoCIF as a submodule to your repository.
-3. Add a circle.yml file to the base of your repository. A sample one, which you can copy paste if you don't already have a circle config, can be found in the samples directory. If you already have a circle config, you may want to merge them manually, unless you want to use only DoCIF.
+3. Add the circle.yml file to the base of your repository. A sample one, which you can copy paste if you don't already have a circle config, can be found [in the samples directory](./sample/circle.yml). If you already have a circle config, you may want to merge them manually, unless you want to use only DoCIF.
 4. Set CircleCi to use your Environment Variable Secrets in the online settings, and set parallelism to 1x (allows for 4 concurrent builds).
 
 ## License
