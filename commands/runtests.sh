@@ -5,6 +5,11 @@ set -e
 DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/../util/docker_common.sh
 
+TEST_CMD="maketest.sh"
+if [ "$1" = "--pending" ]; then
+	TEST_CMD="${TEST_CMD} --pending"
+fi
+
 # Entrypiont is needed to preserve exit code
 docker run \
 	   $(${DIR}/../util/docker_common.sh print_cache_flags) \
@@ -18,7 +23,7 @@ docker run \
 	   -e ${GH_STATUS_TOKEN_VAR}=${GH_STATUS_TOKEN} \
 	   --entrypoint /bin/bash \
 	   ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} \
-	   /home/developer/project/$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/maketest.sh
+	   "/home/developer/project/$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/${TEST_CMD}"
 
 EXIT=$?
 if [ $EXIT -ne 0 ]; then
