@@ -56,7 +56,7 @@ SETUP_COMMAND="sudo apt-get update"
 # Include the setup script itself, as well as any dependency files
 # Leaving this blank will turn off caching
 SETUP_SHA_FILES=()
-SETUP_SHA_FILES+=("./README.md")
+SETUP_SHA_FILES+=("./.gitmodules")
 
 # Environmental variables to make available to the build environment
 ENV_VARS=()
