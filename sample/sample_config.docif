@@ -7,10 +7,12 @@
 # A docker baseimage repostiory
 # REQUIRED, as of now.
 BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
-PUSH_BASEIMAGE=true
+
+# If left false, ${BASEIMAGE_REPO}:master is not pushed when on master.
+PUSH_BASEIMAGE="true"
 
 # The github repository location, for sendings status updates to
-# REQUIRED AS OF NOW
+# REQUIRED FOR API STATUS UPDATES
 GITHUB_REPO='jgkamat/vipaint'
 
 # The url to point to when a status check is pending.
@@ -40,7 +42,7 @@ GH_EMAIL_VAR="GH_EMAIL"
 # Cache directories, not required.
 # Directories to link to the docker container for each build. Add to circle.yml
 # for caching on their servers
-# YOU MUST USE ~ IN YOUR PATH, SO WE KNOW WHERE TO LINK TO INSIDE THE CONTAINER.
+# YOU MUST USE ~ IN YOUR PATH (NO $HOME), SO WE KNOW WHERE TO LINK TO INSIDE THE CONTAINER.
 CACHE_DIRECTORIES=()
 CACHE_DIRECTORIES+=('~/.ccache')
 
@@ -49,13 +51,14 @@ CACHE_DIRECTORIES+=('~/.ccache')
 
 # The script to set up the environment, by default ubuntu.
 # YOU WILL NEED TO USE SUDO TO GET ROOT PRIVLEGES HERE
-SETUP_COMMAND="sudo apt-get update"
+SETUP_COMMAND="sudo apt-get update && sudo apt-get install emacs"
 # SETUP_COMMAND="./ubuntu-setup-script"
 
 # DOCIF can cache baseimages, if you give it files that will force a rebuild if changed.
 # Include the setup script itself, as well as any dependency files
 # Leaving this blank will turn off caching
 SETUP_SHA_FILES=()
+ # This should be included unless you leave this blank, forcing a rebuild when DoCIF is updated
 SETUP_SHA_FILES+=("./.gitmodules")
 
 # Environmental variables to make available to the build environment
@@ -73,7 +76,8 @@ TEST_COMMANDS+=( 'make test-cpp;test-cpp;A test to see if the code passes cpp te
 CLEAN_COMMAND="make clean || true"
 # Other options are `gradle clean`, `mvn clean`, or `rm -rf build`
 
-# API updating command/script.
-# API_AUTOUPDATE_COMMAND="./autoupdate-api"
+# Command to run when deploying. Leave blank for no deploy.
+# Make sure any secrets these commands need are added to ENV_VARS
+DEPLOY_COMMAND="./autoupdate-api"
 
 ################################################################################

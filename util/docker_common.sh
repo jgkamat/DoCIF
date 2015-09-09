@@ -113,12 +113,19 @@ standardize_env_vars() {
 	GH_EMAIL="$(eval echo "\$${GH_EMAIL_VAR}")"
 
 	PENGING_URL=${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}
+
+	if [ -z "$ENV_VARS" ]; then
+		ENV_VARS=()
+	fi
+
+	ENV_VARS+=("CIRCLE_BUILD_NUM")
+	ENV_VARS+=("CIRCLE_ARTIFACTS")
 }
 
 standardize_env_vars
 
 # Don't run things if being sourced
-if $(echo ${0} | grep -q "bash"); then
+if $(echo ${0} | grep -vq "bash"); then
 	# Run commands if requested
 	while (( ${#} )); do
 		case "${1}" in

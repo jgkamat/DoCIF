@@ -11,7 +11,7 @@ fi
 
 docker tag -f ${BASEIMAGE_REPO}:current ${BASEIMAGE_REPO}:master
 
-if [ -n "$DOCKER_PASS" ]; then
+if [ -n "$DOCKER_PASS" -o -n "$DOCKER_USER" -o -n "$DOCKER_EMAIL" ]; then
     docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 	docker push ${BASEIMAGE_REPO}:master
 fi
