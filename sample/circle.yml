@@ -7,17 +7,15 @@ machine:
     # API tokens pushed to repositories for security reasons, so we split it in
     # half as a workaround.  This is only very minor security risk b/c this
     # token only allows access to change commit statuses.
-    GITHUB_HAS_GREAT_SECURITY: insecuretokenspart1
-    GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}insecuretokenspart
+    GITHUB_HAS_GREAT_SECURITY: e55b95c725c15522d07
+    GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}3fae64362ab4b07477304
     GH_EMAIL: github@jgkamat.33mail.com
     GH_USER: jgkamat
 
-# REQUIRED
 checkout:
   post:
     - git submodule update --init
 
-# REQUIRED DOCIF SETTINGS
 dependencies:
   pre:
       # set build status to pending on start
@@ -28,16 +26,14 @@ dependencies:
   cache_directories:
     - ~/.ccache
 
-# The test phase dosen't actually run tests. We need the caching from the deploy step. as part of DoCIF
+# The test phase dosen't actually run tests. We need the caching from the deploy step.
 test:
   override:
     - sh -c true
 
-# TODO add deployment capability to DoCIF
-# deployment:
-#   github:
-#     branch: master
-#     commands:
-#       - ./util/docker/circle/apidocs.sh
-#       - ./util/docker/baseimage/pushbaseimage.sh
+deployment:
+  github:
+    branch: master
+    commands:
+      - ./DoCIF/commands/deploy.sh # This will run DEPLOY_COMMAND as well
 
