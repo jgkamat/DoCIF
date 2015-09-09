@@ -3,7 +3,7 @@
 set -e
 
 DIR=$(cd $(dirname $0) ; pwd -P)
-source ${DIR}/../docker_common.sh
+source ${DIR}/../util/docker_common.sh
 
 if [ "$PUSH_BASEIMAGE" = "false" ]; then
 	exit 0
