@@ -12,8 +12,8 @@ BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
 PUSH_BASEIMAGE="true"
 
 # The github repository location, for sendings status updates to
-# REQUIRED FOR API STATUS UPDATES
-GITHUB_REPO='jgkamat/vipaint'
+# REQUIRED FOR API STATUS UPDATES. Case sensitive!
+GITHUB_REPO='jgkamat/ViPaint'
 
 # The url to point to when a status check is pending.
 # Optional, will point to https://github.com/jgkamat/DoCIF if empty.
@@ -27,8 +27,9 @@ PENDING_URL="https://github.com/jgkamat/DoCIF"
 DOCKER_PASSWORD_VAR="DOCKER_PASS"
 DOCKER_EMAIL_VAR="DOCKER_EMAIL"
 DOCKER_USER_VAR="DOCKER_USER"
-# This would be insecure
-# DOCKER_EMAIL="spam@gmail.com"
+# This would be insecure, but you can do it below. You should add these vars to
+# circle protected environment variables
+# DOCKER_EMAIL="help@gmail.com"
 
 ################################################################################
 
@@ -40,7 +41,7 @@ GH_USER_VAR="GH_USER"
 GH_EMAIL_VAR="GH_EMAIL"
 
 # Cache directories, not required.
-# Directories to link to the docker container for each build. Add to circle.yml
+# Directories to link to the docker container for each build and persist between builds. Add to circle.yml as well.
 # for caching on their servers
 # YOU MUST USE ~ IN YOUR PATH (NO $HOME), SO WE KNOW WHERE TO LINK TO INSIDE THE CONTAINER.
 CACHE_DIRECTORIES=()

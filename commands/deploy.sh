@@ -12,12 +12,22 @@ fi
 docker tag -f ${BASEIMAGE_REPO}:current ${BASEIMAGE_REPO}:master
 
 if [ -n "$DOCKER_PASS" -o -n "$DOCKER_USER" -o -n "$DOCKER_EMAIL" ]; then
-    docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+	docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 	docker push ${BASEIMAGE_REPO}:master
 fi
 
 if [ -n "$DEPLOY_COMMAND" ]; then
-	${DEPLOY_COMMAND}
+	# Run deploy_command within a docker container
+	docker run \
+		$(${DIR}/../util/docker_common.sh print_cache_flags) \
+		-v ${PROJECT_ROOT}:/home/developer/project \
+		-v ${CIRCLE_ARTIFACTS:-/tmp/}:/tmp/build_artifacts \
+		$(${DIR}/../util/docker_common.sh print_environment_flags) \
+		-e ${GH_USER_VAR}=${GH_USERNAME} \
+		-e ${GH_EMAIL_VAR}=${GH_EMAIL} \
+		-e ${GH_STATUS_TOKEN_VAR}=${GH_STATUS_TOKEN} \
+		--entrypoint /bin/bash \
+		${BASEIMAGE_REPO}:${CACHING_SHA:-latest} -c "$DEPLOY_COMMAND"
 else
 	echo "[WARN] No custom DEPLOY_COMMAND." >&2
 fi
