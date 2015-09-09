@@ -78,6 +78,6 @@ CLEAN_COMMAND="make clean || true"
 
 # Command to run when deploying. Leave blank for no deploy.
 # Make sure any secrets these commands need are added to ENV_VARS
-DEPLOY_COMMAND="./autoupdate-api"
+DEPLOY_COMMAND='echo "My secrets are $GH_EMAIL"'
 
 ################################################################################
