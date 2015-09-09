@@ -17,7 +17,7 @@ if [ -n "$DOCKER_PASS" -o -n "$DOCKER_USER" -o -n "$DOCKER_EMAIL" ]; then
 fi
 
 if [ -n "$DEPLOY_COMMAND" ]; then
-	sh -c ${DEPLOY_COMMAND}
+	${DEPLOY_COMMAND}
 else
 	echo "[WARN] No custom DEPLOY_COMMAND." >&2
 fi
