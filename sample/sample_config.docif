@@ -19,6 +19,11 @@ GITHUB_REPO='jgkamat/ViPaint'
 # Optional, will point to https://github.com/jgkamat/DoCIF if empty.
 PENDING_URL="https://github.com/jgkamat/DoCIF"
 
+# A custom dockerfile, for advanced setup
+# DO NOT SET THIS IF YOU ARE A FIRST TIME USER.
+# See ./commands/Dockerfile for the default dockerfile
+# CUSTOM_DOCKERFILE="./custom/DOCKERFILE"
+
 ############################## Variable Names ##################################
 
 # These are the variables that will hold secrets and such.

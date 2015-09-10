@@ -120,6 +120,12 @@ standardize_env_vars() {
 
 	ENV_VARS+=("CIRCLE_BUILD_NUM")
 	ENV_VARS+=("CIRCLE_ARTIFACTS")
+
+	if [ -z "${CUSTOM_DOCKERFILE}" ]; then
+		DOCKERFILE="${DOCIF_ROOT}/commands/Dockerfile"
+	else
+		DOCKERFILE="${PROJECT_ROOT}/${CUSTOM_DOCKERFILE}"
+	fi
 }
 
 standardize_env_vars

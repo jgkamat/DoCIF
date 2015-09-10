@@ -10,7 +10,7 @@ if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositor
 	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
 else
 	# The tag does not exist, let's build it!
-	docker build -t ${BASEIMAGE_REPO}:in_progress  -f ${DOCIF_ROOT}/commands/Dockerfile .
+	docker build -t "${BASEIMAGE_REPO}:in_progress"  -f "${DOCKERFILE}" .
 	if [ -n "$SETUP_COMMAND" ]; then
 		docker run \
 			   --entrypoint="/bin/bash" \
