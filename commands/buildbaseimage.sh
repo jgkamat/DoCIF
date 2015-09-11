@@ -23,7 +23,7 @@ else
 	docker commit "$(docker ps -aq | head -n1)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
 
 	if [ -n "$DOCKER_PASSWORD" -a -n "$DOCKER_EMAIL" -a -n "$DOCKER_USERNAME" ]; then
-		docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 		# Exit on failed login
 		if [ $? -ne 0 ]; then
 			echo "[WARN] Docker login FAILED. This most likeley means invalid credentials Exiting..." >&2
