@@ -2,7 +2,7 @@
 #
 # A sample config file for DoCIF
 #
-# This is just a shell file that is sourced by all the DoCIF scripts.
+# This is just a shell file that is sourced by DoCIF scripts.
 
 # A docker baseimage repostiory
 # REQUIRED, as of now.
@@ -12,7 +12,7 @@ BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
 PUSH_BASEIMAGE="true"
 
 # The github repository location, for sendings status updates to
-# REQUIRED FOR API STATUS UPDATES. Case sensitive!
+# REQUIRED. Case sensitive!
 GITHUB_REPO='jgkamat/ViPaint'
 
 # The url to point to when a status check is pending.
@@ -36,14 +36,14 @@ DOCKER_USER_VAR="DOCKER_USER"
 # circle protected environment variables
 # DOCKER_EMAIL="help@gmail.com"
 
-################################################################################
-
 # Status token is used for updating status
 GH_STATUS_TOKEN_VAR="GH_STATUS"
 # Variable holing the username of the Status Token
 GH_USER_VAR="GH_USER"
 # Variable holing the email of the Status Token
 GH_EMAIL_VAR="GH_EMAIL"
+
+################################################################################
 
 # Cache directories, not required.
 # Directories to link to the docker container for each build and persist between builds. Add to circle.yml as well.
@@ -67,10 +67,6 @@ SETUP_SHA_FILES=()
  # This file should be included unless you leave this variable completely blank, forcing a rebuild when DoCIF is updated
 SETUP_SHA_FILES+=("./.gitmodules")
 
-# Environmental variables to make available to the build environment
-ENV_VARS=()
-ENV_VARS+=("GH_PUSH_TOKEN")  # To be used by autoupdating script
-
 # Commands to run when testing. Each index will have it's own status token
 # Commands are in this format
 # COMMAND; SHORT_NAME; DESCRIPTION
@@ -82,8 +78,12 @@ TEST_COMMANDS+=( 'make test-cpp;test-cpp;A test to see if the code passes cpp te
 CLEAN_COMMAND="make clean || true"
 # Other options are `gradle clean`, `mvn clean`, or `rm -rf build`
 
+# Environmental variables to make available to the build environment
+ENV_VARS=()
+ENV_VARS+=("GH_PUSH_TOKEN")  # To be used by autoupdating script
+
 # Command to run when deploying. Leave blank for no deploy.
 # Make sure any secrets these commands need are added to ENV_VARS
-DEPLOY_COMMAND="echo My secrets are $GH_EMAIL"
+DEPLOY_COMMAND="echo My secrets are $GH_USER"
 
 ################################################################################
