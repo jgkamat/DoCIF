@@ -57,14 +57,14 @@ CACHE_DIRECTORIES+=('~/.ccache')
 
 # The script to set up the environment, by default ubuntu.
 # YOU WILL NEED TO USE SUDO TO GET ROOT PRIVLEGES HERE
-SETUP_COMMAND="sudo apt-get update && sudo apt-get install emacs"
+SETUP_COMMAND="sudo apt-get update && sudo apt-get -y install emacs"
 # SETUP_COMMAND="./ubuntu-setup-script"
 
 # DOCIF can cache baseimages, if you give it files that will force a rebuild if changed.
 # Include the setup script itself, as well as any dependency files
 # Leaving this blank will turn off caching
 SETUP_SHA_FILES=()
- # This should be included unless you leave this blank, forcing a rebuild when DoCIF is updated
+ # This file should be included unless you leave this variable completely blank, forcing a rebuild when DoCIF is updated
 SETUP_SHA_FILES+=("./.gitmodules")
 
 # Environmental variables to make available to the build environment
