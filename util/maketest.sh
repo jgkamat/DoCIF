@@ -50,7 +50,7 @@ ci_task() {
 
 	SHORTNAMES+=("${SHORTNAME}")
 
-	if [ "$PENDING" = "true" ]; then
+	if [ "$PENDING" = "true" -o "$FAIL_ALL_TESTS" = "true" ]; then
 		return 0
 	fi
 
