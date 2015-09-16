@@ -10,17 +10,27 @@ if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositor
 	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
 else
 	# The tag does not exist, let's build it!
+	set +e
 	docker build -t "${BASEIMAGE_REPO}:in_progress"  -f "${DOCKERFILE}" .
+	if [ $? -ne 0 ]; then
+		echo "[ERR] The Dockerfile build FAILED. Please report this if using the default dockerfile. Exiting..." >&2
+		${DOCIF_ROOT}/util/maketest.sh --fail
+		exit 1
+	fi
+	set -e
+
 	if [ -n "$SETUP_COMMAND" ]; then
+		set +e
 		docker run \
 			   --entrypoint="/bin/bash" \
 			   -v ${PROJECT_ROOT}:/home/developer/project ${BASEIMAGE_REPO}:in_progress \
 			   -c "${SETUP_COMMAND}"
 		if [ $? -ne 0 ]; then
 			echo "[ERR] Your setup command FAILED. Exiting..." >&2
-			${DOCIF_ROOT}/util/maketest --fail
+			${DOCIF_ROOT}/util/maketest.sh --fail
 			exit 1
 		fi
+		set -e
 	else
 		echo "[WARN] No setup command was supplied. Using bare baseimage environment." >&2
 	fi
