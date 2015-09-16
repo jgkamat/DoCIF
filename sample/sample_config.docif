@@ -52,6 +52,7 @@ GH_EMAIL_VAR="GH_EMAIL"
 # Directories to link to the docker container for each build and persist between builds. Add to circle.yml as well.
 # for caching on their servers
 # YOU MUST USE ~ IN YOUR PATH (NO $HOME), SO WE KNOW WHERE TO LINK TO INSIDE THE CONTAINER.
+# This directory MUST BE ADDED TO circle.yml AS WELL IN ORDER FOR ACTUAL CACHING TO TAKE PLACE
 CACHE_DIRECTORIES=()
 CACHE_DIRECTORIES+=('~/.ccache')
 

@@ -12,7 +12,7 @@ fi
 
 # Entrypiont is needed to preserve exit code
 docker run \
-	   $(${DIR}/../util/docker_common.sh print_cache_flags) \
+	   $(eval echo $(${DIR}/../util/docker_common.sh print_cache_flags)) \
 	   -v ${PROJECT_ROOT}:/home/developer/project \
 	   -v ${CIRCLE_ARTIFACTS:-/tmp/}:/tmp/build_artifacts \
 	   $(${DIR}/../util/docker_common.sh print_environment_flags) \
