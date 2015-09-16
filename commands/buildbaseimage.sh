@@ -18,6 +18,7 @@ else
 			   -c "${SETUP_COMMAND}"
 		if [ $? -ne 0 ]; then
 			echo "[ERR] Your setup command FAILED. Exiting..." >&2
+			${DOCIF_ROOT}/util/maketest --fail
 			exit 1
 		fi
 	else
