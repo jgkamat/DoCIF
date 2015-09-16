@@ -1,5 +1,8 @@
 #!/bin/bash
+#
 # Runs tests and reports on them to github
+#
+# USAGE: ./maketest [--pending | --fail]
 
 DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/docker_common.sh
@@ -10,6 +13,7 @@ LINK_PREFIX="https://circle-artifacts.com/gh/${GITHUB_REPO}/$CIRCLE_BUILD_NUM/ar
 ARTIFACT_DIR="/tmp/build_artifacts"
 mkdir -p ${ARTIFACT_DIR}
 PENDING=false
+FAIL_ALL_TESTS=false
 SHORTNAMES=( )
 
 start_pending() {
@@ -23,6 +27,19 @@ start_pending() {
 	 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
 	 -H "Content-Type: application/json" \
 	 -d '{"state":"pending", "description": "This check is pending. Please wait.", "context": '"\"circle/$SHORTNAME\""', "target_url": "'"${PENDING_URL}"'"}'
+}
+
+fail_test() {
+	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
+		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
+		return 0
+	fi
+
+	SHORTNAME="$1"
+	>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
+	 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+	 -H "Content-Type: application/json" \
+	 -d '{"state":"failure", "description": "This check failed due to an internal error.", "context": '"\"circle/$SHORTNAME\""', "target_url": "'"${PENDING_URL}"'"}'
 }
 
 # A function to run a command. Takes in a command name, shortname and description.
@@ -62,6 +79,8 @@ ci_task() {
 
 if [ "$1" = "--pending" ]; then
 	PENDING=true
+elif [ "$1" = "--fail" ]; then
+	FAIL_ALL_TESTS=true
 fi
 
 # Go to root so we can make.
@@ -88,6 +107,12 @@ done
 if [ "$PENDING" = "true" ]; then
 	for i in "${SHORTNAMES[@]}"; do
 		start_pending ${i}
+	done
+fi
+
+if [ "$FAIL_ALL_TESTS" = "true" ]; then
+	for i in "${SHORTNAMES[@]}"; do
+		fail_test ${i}
 	done
 fi
 

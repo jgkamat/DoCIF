@@ -16,6 +16,10 @@ else
 			   --entrypoint="/bin/bash" \
 			   -v ${PROJECT_ROOT}:/home/developer/project ${BASEIMAGE_REPO}:in_progress \
 			   -c "${SETUP_COMMAND}"
+		if [ $? -ne 0 ]; then
+			echo "[ERR] Your setup command FAILED. Exiting..." >&2
+			exit 1
+		fi
 	else
 		echo "[WARN] No setup command was supplied. Using bare baseimage environment." >&2
 	fi
@@ -26,7 +30,7 @@ else
 		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 		# Exit on failed login
 		if [ $? -ne 0 ]; then
-			echo "[WARN] Docker login FAILED. This most likeley means invalid credentials Exiting..." >&2
+			echo "[WARN] Docker login FAILED. This most likeley means invalid credentials. Exiting..." >&2
 			exit 1
 		fi
 
