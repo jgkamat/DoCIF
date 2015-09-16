@@ -111,8 +111,9 @@ standardize_env_vars() {
 	GH_USERNAME="$(eval echo "\$${GH_USER_VAR}")"
 	GH_EMAIL="$(eval echo "\$${GH_EMAIL_VAR}")"
 
-	PENGING_URL=${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}
-	CLEAN_COMMAND=${CLEAN_COMMAND:-"true"}
+	PENGING_URL="${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}"
+	CLEAN_COMMAND="${CLEAN_COMMAND:-"true"}"
+	PUSH_BASEIMAGE="${PUSH_BASEIMAGE:-"false"}"
 
 	if [ -z "$ENV_VARS" ]; then
 		ENV_VARS=()

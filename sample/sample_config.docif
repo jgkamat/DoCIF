@@ -4,24 +4,27 @@
 #
 # This is just a shell file that is sourced by DoCIF scripts.
 
-# A docker baseimage repostiory
-# REQUIRED, as of now.
+# @REQUIRED
+# A docker baseimage repostiory. Create one on the docker hub
 BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
 
-# If left false, ${BASEIMAGE_REPO}:master is not pushed when on master.
+# If true, ${BASEIMAGE_REPO}:master is pushed when on master.
+# Defaults to false.
 PUSH_BASEIMAGE="true"
 
+# @REQUIRED
 # The github repository location, for sendings status updates to
-# REQUIRED. Case sensitive!
+# This is CASE SENSITIVE!!
 GITHUB_REPO='jgkamat/ViPaint'
 
 # The url to point to when a status check is pending.
-# Optional, will point to https://github.com/jgkamat/DoCIF if empty.
+# Will point to https://github.com/jgkamat/DoCIF if unset.
 PENDING_URL="https://github.com/jgkamat/DoCIF"
 
 # A custom dockerfile, for advanced setup
 # DO NOT SET THIS IF YOU ARE A FIRST TIME USER.
 # See ./commands/Dockerfile for the default dockerfile
+# This file is in relation to you'r project's root.
 # CUSTOM_DOCKERFILE="./custom/DOCKERFILE"
 
 ############################## Variable Names ##################################
@@ -33,7 +36,7 @@ DOCKER_PASSWORD_VAR="DOCKER_PASS"
 DOCKER_EMAIL_VAR="DOCKER_EMAIL"
 DOCKER_USER_VAR="DOCKER_USER"
 # This would be insecure, but you can do it below. You should add these vars to
-# circle protected environment variables
+# circle protected environment variables if you are concerned about security
 # DOCKER_EMAIL="help@gmail.com"
 
 # Status token is used for updating status
@@ -67,6 +70,7 @@ SETUP_SHA_FILES=()
  # This file should be included unless you leave this variable completely blank, forcing a rebuild when DoCIF is updated
 SETUP_SHA_FILES+=("./.gitmodules")
 
+# @REQUIRED
 # Commands to run when testing. Each index will have it's own status token
 # Commands are in this format
 # COMMAND; SHORT_NAME; DESCRIPTION
@@ -74,7 +78,8 @@ TEST_COMMANDS=()
 TEST_COMMANDS+=( 'make;compile;A test to see if the code compiles' )
 TEST_COMMANDS+=( 'make test-cpp;test-cpp;A test to see if the code passes cpp tests' )
 
-# Reccomended: Clean command. Cleans the build files so there is no way the previous build can interfere. Add if you run
+# @RECCOMENDED
+# Clean command. Cleans the build files so there is no way the previous build can interfere. Add if you run
 # into issues
 CLEAN_COMMAND="make clean || true"
 # Other options are `gradle clean`, `mvn clean`, or `rm -rf build`
