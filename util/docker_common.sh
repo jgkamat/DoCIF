@@ -89,14 +89,14 @@ check_variable "TEST_COMMANDS"
 
 print_environment_flags() {
 	for i in "${ENV_VARS[@]}"; do
-		printf " -e ${i}=\${$i} "
+		printf " -e \"${i}\"=\"\${$i}\" "
 	done
 	printf "\n"
 }
 
 print_cache_flags() {
 	for i in "${CACHE_DIRECTORIES[@]}"; do
-		printf " -v $(echo $i | sed 's/~/${HOME}/'):$(echo $i | sed 's%~%/home/developer%') "
+		printf " -v \"$(echo $i | sed 's/~/${HOME}/')\":\"$(echo $i | sed 's%~%/home/developer%')\" "
 	done
 	printf "\n"
 }
