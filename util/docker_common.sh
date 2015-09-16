@@ -86,7 +86,6 @@ CACHING_SHA="$(get_setup_sha)"
 COMMIT_SHA="$(get_commit_sha)"
 
 check_variable "TEST_COMMANDS"
-check_variable "CLEAN_COMMAND"
 
 print_environment_flags() {
 	for i in "${ENV_VARS[@]}"; do
@@ -113,6 +112,7 @@ standardize_env_vars() {
 	GH_EMAIL="$(eval echo "\$${GH_EMAIL_VAR}")"
 
 	PENGING_URL=${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}
+	CLEAN_COMMAND=${CLEAN_COMMAND:-"true"}
 
 	if [ -z "$ENV_VARS" ]; then
 		ENV_VARS=()
