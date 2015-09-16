@@ -5,15 +5,14 @@ set -e
 DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/../util/docker_common.sh
 
-if [ "$PUSH_BASEIMAGE" = "false" ]; then
-	exit 0
-fi
 
 docker tag -f ${BASEIMAGE_REPO}:current ${BASEIMAGE_REPO}:master
 
 if [ -n "$DOCKER_PASSWORD" -o -n "$DOCKER_USERNAME" -o -n "$DOCKER_EMAIL" ]; then
-	docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-	docker push ${BASEIMAGE_REPO}:master
+	if [ "$PUSH_BASEIMAGE" = "true" ]; then
+		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+		docker push ${BASEIMAGE_REPO}:master
+	fi
 fi
 
 if [ -n "$DEPLOY_COMMAND" ]; then
