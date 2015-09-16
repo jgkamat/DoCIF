@@ -132,7 +132,7 @@ standardize_env_vars() {
 standardize_env_vars
 
 # Don't run things if being sourced
-if $(echo ${0} | grep -q "bash"); then
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 	# Run commands if requested
 	while (( ${#} )); do
 		case "${1}" in

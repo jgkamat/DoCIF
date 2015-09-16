@@ -9,7 +9,7 @@ source ${DIR}/docker_common.sh
 
 # Get sha sum
 SUCCESS=true
-LINK_PREFIX="https://circle-artifacts.com/gh/${GITHUB_REPO}/$CIRCLE_BUILD_NUM/artifacts/0$CIRCLE_ARTIFACTS/"
+LINK_PREFIX="https://circle-artifacts.com/gh/${GITHUB_REPO}/${CIRCLE_BUILD_NUM}/artifacts/0$CIRCLE_ARTIFACTS/"
 ARTIFACT_DIR="/tmp/build_artifacts"
 mkdir -p ${ARTIFACT_DIR}
 PENDING=false
