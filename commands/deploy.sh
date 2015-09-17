@@ -11,7 +11,13 @@ docker tag -f ${BASEIMAGE_REPO}:current ${BASEIMAGE_REPO}:master
 if [ -n "$DOCKER_PASSWORD" -o -n "$DOCKER_USERNAME" -o -n "$DOCKER_EMAIL" ]; then
 	if [ "$PUSH_BASEIMAGE" = "true" ]; then
 		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+		set +e
 		docker push ${BASEIMAGE_REPO}:master
+		if [ $? -ne 0 ]; then
+			echo "[WARN] The push to the source repository FAILED. This usually means the dockerhub is down." >&2
+		fi
+		set -e
 	fi
 fi
 

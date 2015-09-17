@@ -46,7 +46,12 @@ else
 		fi
 
 		if [ "$PUSH_BASEIMAGE" = "true" ]; then
+			set +e
 			docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+			if [ $? -ne 0 ]; then
+				echo "[WARN] The push to the source repository FAILED. This usually means the dockerhub is down." >&2
+			fi
+			set -e
 		fi
 	else
 		echo "[WARN] Docker credentials not found. Skipping push." >&2
