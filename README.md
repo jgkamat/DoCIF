@@ -23,5 +23,14 @@ optional, some must be changed.
 3. Add the circle.yml file to the base of your repository. A sample one, which you can copy paste if you don't already have a circle config, can be found [in the samples directory](./sample/circle.yml). If you already have a circle config, you may want to merge them manually, unless you want to use only DoCIF.
 4. Set CircleCi to use your Environment Variable Secrets in the online settings, and set parallelism to 1x (allows for 4 concurrent builds).
 
+## Easy Setup
+
+1. `git submodule add https://github.com/jgkamat/DoCIF.git` in project root
+2. `cp DoCIF/sample/sample_config.docif .`
+    1. Edit sample_config.docif to use settings specific to your project. Take a look at every setting with a `@REQUIRED` label
+3. `cp DoCIF/sample/config.yml ` This will overwrite your existing circle.yml
+4. Add the secrets you told config.docif about into the circleci web interface to use all features.
+5. Enjoy!
+
 ## License
 DoCIF is licensed under the GNU LGPLv3. In an incomplete summary, this means you can use DoCIF with any project (even nonfree ones :cry:), but if you mod DoCIF itself, you must license the derivative work under the LGPLv3 or the GPLv3. See the included LICENSE file for details.
