@@ -8,8 +8,9 @@ MAINTAINER Jay Kamat github@jgkamat.33mail.com
 ENV DEBIAN_FRONTEND noninteractive
 
 # Use UTF-8, fixes some hard to debug issues
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
+# This is not workin on cirlceci's current setup. Will reenable once its working again
+# RUN locale-gen en_US.UTF-8
+# ENV LANG en_US.UTF-8
 
 # setup apt tools and other goodies we want
 RUN apt-get update --fix-missing && apt-get -y install apt-utils wget curl iputils-ping vim-nox debconf-utils git software-properties-common sudo && apt-get clean
