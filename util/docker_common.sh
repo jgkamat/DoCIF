@@ -6,13 +6,6 @@ set -e
 COMMON_DIR=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/
 DOCIF_ROOT=$(cd ${COMMON_DIR} && git rev-parse --show-toplevel)
 
-# Get sha sum
-# SHA_SUM_SETUP="$(${ROBOCUP_ROOT}/util/docker/getsetupsha.sh)"
-# SHA_SUM="$(git rev-parse HEAD)"
-# TODO replace with proper vars
-# IMAGE_NAME_CI="robojackets/robocup-ci"
-# IMAGE_NAME_BASE="robojackets/robocup-baseimage"
-
 usage() {
 	echo "An internal error occured. Please report this."
 }
@@ -96,7 +89,7 @@ print_environment_flags() {
 
 print_cache_flags() {
 	for i in "${CACHE_DIRECTORIES[@]}"; do
-		printf " -v \"$(echo $i | sed 's/~/${HOME}/')\":\"$(echo $i | sed 's%~%/home/developer%')\" "
+		printf " -v $(echo $i | sed 's/~/${HOME}/' | sed 's/^\./$(pwd)/'):$(echo $i | sed 's%~%/home/developer%' | sed 's%^\.%/home/developer/project%') "
 	done
 	printf "\n"
 }
