@@ -23,7 +23,7 @@ else
 		set +e
 		docker run \
 			   --entrypoint="/bin/bash" \
-			   -v ${PROJECT_ROOT}:/home/developer/project ${BASEIMAGE_REPO}:in_progress \
+			   -v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} ${BASEIMAGE_REPO}:in_progress \
 			   -c "${SETUP_COMMAND}"
 		if [ $? -ne 0 ]; then
 			echo "[ERR] Your setup command FAILED. Exiting..." >&2

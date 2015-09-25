@@ -25,7 +25,7 @@ if [ -n "$DEPLOY_COMMAND" ]; then
 	# Run deploy_command within a docker container
 	docker run \
 		$(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
-		-v ${PROJECT_ROOT}:/home/developer/project \
+		-v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} \
 		-v ${CIRCLE_ARTIFACTS:-/tmp/}:/tmp/build_artifacts \
 		$(eval echo \"$(${DIR}/../util/docker_common.sh print_environment_flags)\") \
 		-e ${GH_USER_VAR}=${GH_USERNAME} \

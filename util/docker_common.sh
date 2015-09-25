@@ -89,7 +89,7 @@ print_environment_flags() {
 
 print_cache_flags() {
 	for i in "${CACHE_DIRECTORIES[@]}"; do
-		printf " -v $(echo $i | sed 's/~/${HOME}/' | sed 's/^\./$(pwd)/'):$(echo $i | sed 's%~%/home/developer%' | sed 's%^\.%/home/developer/project%') "
+		printf " -v $(echo $i | sed 's/~/${HOME}/' | sed 's/^\./$(pwd)/'):$(echo $i | sed 's%~%/home/developer%' | sed "s%^\.%${DOCKER_PROJECT_ROOT}%") "
 	done
 	printf "\n"
 }
@@ -107,6 +107,10 @@ standardize_env_vars() {
 	PENGING_URL="${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}"
 	CLEAN_COMMAND="${CLEAN_COMMAND:-"true"}"
 	PUSH_BASEIMAGE="${PUSH_BASEIMAGE:-"false"}"
+
+	DOCKER_PROJECT_ROOT="${DOCKER_PROJECT_ROOT:-"/home/developer/project"}"
+	GIT_CLONE_ROOT="${GIT_CLONE_ROOT:-"${DOCKER_PROJECT_ROOT}"}"
+
 
 	if [ -z "$ENV_VARS" ]; then
 		ENV_VARS=()
