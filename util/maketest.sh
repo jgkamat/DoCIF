@@ -98,7 +98,10 @@ for i in "${CACHE_DIRECTORIES[@]}"; do
 		i="$(echo $i | sed 's/~/${HOME}/')"
 		sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
 	else
-		echo "[WARN] Cache directory $i not found!" >&2
+		echo "[WARN] Cache directory $i not found! Creating an empty one." >&2
+		i="$(echo $i | sed 's/~/${HOME}/')"
+		mkdir -p "$(eval echo "$i")"
+		sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
 	fi
 done
 
