@@ -88,6 +88,9 @@ cd ${PROJECT_ROOT}
 
 # Clean
 sh -c "$CLEAN_COMMAND"
+git submodule sync
+git submodule update --init || true
+git submodule sync
 git submodule update --init
 for i in "${CACHE_DIRECTORIES[@]}"; do
 	if [ -d "$i" ]; then
