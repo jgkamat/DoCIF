@@ -88,6 +88,9 @@ cd ${PROJECT_ROOT}
 
 # Clean
 sh -c "$CLEAN_COMMAND"
+git submodule sync
+git submodule update --init || true
+git submodule sync
 git submodule update --init
 for i in "${CACHE_DIRECTORIES[@]}"; do
 	if [ -d "$i" ]; then
@@ -95,7 +98,10 @@ for i in "${CACHE_DIRECTORIES[@]}"; do
 		i="$(echo $i | sed 's/~/${HOME}/')"
 		sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
 	else
-		echo "[WARN] Cache directory $i not found!" >&2
+		echo "[WARN] Cache directory $i not found! Creating an empty one." >&2
+		i="$(echo $i | sed 's/~/${HOME}/')"
+		mkdir -p "$(eval echo "$i")"
+		sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
 	fi
 done
 
