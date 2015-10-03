@@ -14,7 +14,8 @@ machine:
 
 checkout:
   post:
-    - git submodule update --init
+	  # Make sure that submodules are really, truly up to date
+	- git submodule sync && - git submodule update --init || true && git submodule sync && git submodule update --init
 
 dependencies:
   pre:
