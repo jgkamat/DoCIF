@@ -94,13 +94,13 @@ git submodule sync
 git submodule update --init
 for i in "${CACHE_DIRECTORIES[@]}"; do
 	i="$(echo $i | sed 's/~/${HOME}/')"		# Sanitize i
+	i="$(eval echo "$i")"
 	if [ -d "$i" ]; then
-		# Use ${HOME} in this case
-		sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
+		sudo chown -R `whoami`:`whoami` "$i"
 	else
 		echo "[WARN] Cache directory '$i' not found! Creating an empty one." >&2
-		mkdir -p "$(eval echo "$i")"
-		sudo chown -R `whoami`:`whoami` "$(eval echo "$i")"
+		mkdir -p "$i"
+		sudo chown -R `whoami`:`whoami` "$i"
 	fi
 done
 
