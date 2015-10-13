@@ -135,6 +135,8 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 		case "${1}" in
 			get_repo_root )
 				get_repo_root; shift 1 ;;
+			caching_sha )
+				echo $CACHING_SHA; shift 1 ;;
 			run_in_project )
 				run_in_project ${2}; shift 2 ;;
 			print_environment_flags )
