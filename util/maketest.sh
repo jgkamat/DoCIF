@@ -87,11 +87,7 @@ fi
 cd ${PROJECT_ROOT}
 
 # Clean
-sh -c "$CLEAN_COMMAND"
-git submodule sync
-git submodule update --init || true
-git submodule sync
-git submodule update --init
+git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
 for i in "${CACHE_DIRECTORIES[@]}"; do
 	i="$(echo $i | sed 's/~/${HOME}/')"		# Sanitize i
 	i="$(eval echo "$i")"
@@ -103,6 +99,8 @@ for i in "${CACHE_DIRECTORIES[@]}"; do
 		sudo chown -R `whoami`:`whoami` "$i"
 	fi
 done
+
+sh -c "$CLEAN_COMMAND"
 
 for i in "${TEST_COMMANDS[@]}"; do
 	ci_task "$i"
