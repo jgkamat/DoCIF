@@ -31,8 +31,8 @@ if [ -n "$DEPLOY_COMMAND" ]; then
 		-e ${GH_USER_VAR}=${GH_USERNAME} \
 		-e ${GH_EMAIL_VAR}=${GH_EMAIL} \
 		-e ${GH_STATUS_TOKEN_VAR}=${GH_STATUS_TOKEN} \
-		--entrypoint="" \
-		${BASEIMAGE_REPO}:${CACHING_SHA:-latest} "$DEPLOY_COMMAND"
+		--entrypoint /bin/bash \
+		${BASEIMAGE_REPO}:${CACHING_SHA:-latest} -c "$DEPLOY_COMMAND"
 else
 	echo "[WARN] No custom DEPLOY_COMMAND." >&2
 fi

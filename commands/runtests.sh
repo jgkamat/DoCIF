@@ -19,9 +19,9 @@ docker run \
 	   -e ${GH_USER_VAR}=${GH_USERNAME} \
 	   -e ${GH_EMAIL_VAR}=${GH_EMAIL} \
 	   -e ${GH_STATUS_TOKEN_VAR}=${GH_STATUS_TOKEN} \
-	   --entrypoint="" \
+	   --entrypoint /bin/bash \
 	   ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} \
-	   "${GIT_CLONE_ROOT}$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/${TEST_CMD}"
+	   -c "${GIT_CLONE_ROOT}$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/${TEST_CMD}"
 
 EXIT=$?
 if [ $EXIT -ne 0 ]; then
