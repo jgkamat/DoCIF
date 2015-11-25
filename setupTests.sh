@@ -6,8 +6,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Make sure our submodules are up to scratch.
 cd "$DIR"
-git submodule update --init
-git submodule add https://github.com/jgkamat/DoCIF.git
+git submodule add -f https://github.com/jgkamat/DoCIF.git
 
 # Get the sha of the current rev
 cd "$DIR/.."

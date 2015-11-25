@@ -80,7 +80,7 @@ SETUP_SHA_FILES=()
  # This file should be included unless you leave this variable completely blank, forcing a rebuild when DoCIF is updated
 SETUP_SHA_FILES+=("./config.docif")
 # Force an update every time!
-SETUP_SHA_FILES+=("<(git --git-dir ./DoCIF/.git --work-tree ./DoCIF rev-parse HEAD)")
+SETUP_SHA_FILES+=("<(git -C ./DoCIF rev-parse HEAD)")
 
 # @REQUIRED
 # Commands to run when testing. Each index will have it's own status token
