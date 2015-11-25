@@ -59,8 +59,8 @@ get_setup_sha() {
 
 	for i in "${SETUP_SHA_FILES[@]}"; do
 		# prevent variable errors later
-		i = "$i"
-		if ! [ -r $i ]; then
+		i="$i"
+		if [ ! -r $i ]; then
 			echo "[ERR] $i was not readable, cannot SHA. Exiting" >&2
 			exit 1
 		fi
