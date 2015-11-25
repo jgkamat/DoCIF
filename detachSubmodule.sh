@@ -8,7 +8,7 @@ cd "$DIR"
 
 REV=$(git rev-parse HEAD)
 URL=$(git config --get remote.origin.url)
-SUPERDIR="$(echo "$DIR" | grep -Eo '[a-zA-Z]+[/]*$')"
+SUPERDIR="$(echo "$DIR" | grep -Eo '[.a-zA-Z]+[/]*$')"
 
 cd ..
 rm -rf "$SUPERDIR"
