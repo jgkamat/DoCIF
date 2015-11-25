@@ -10,16 +10,16 @@ machine:
     GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}d0d73204e90714b6c
     GH_EMAIL: jaysdocbot@jgkamat.33mail.com
     GH_USER: jaysdocbot
-	TEST_ENV_VARS: hello world
+    TEST_ENV_VARS: hello world
 
 checkout:
   post:
-	  # Make sure that submodules are really, truly up to date
-	- git submodule sync && - git submodule update --init || true && git submodule sync && git submodule update --init
+    # Make sure that submodules are really, truly up to date
+    - git submodule sync && - git submodule update --init || true && git submodule sync && git submodule update --init
 
 dependencies:
   pre:
-	- ./.testing/setupTests.sh
+    - ./.testing/setupTests.sh
       # set build status to pending on start
     - ./.testing/DoCIF/util/maketest.sh --pending
     - ./.testing/DoCIF/commands/buildbaseimage.sh
