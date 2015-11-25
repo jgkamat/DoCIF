@@ -104,6 +104,6 @@ ENV_VARS+=("TEST_ENV_VARS")  # To be used by autoupdating script
 
 # Command to run when deploying. Leave blank for no deploy.
 # Make sure any secrets these commands need are added to ENV_VARS
-DEPLOY_COMMAND="echo I'm deploying!"
+DEPLOY_COMMAND='echo "we are deploying!"'
 
 ################################################################################
