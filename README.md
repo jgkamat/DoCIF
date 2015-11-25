@@ -1,4 +1,5 @@
-# DoCIF
+# DoCIF [![Build Status](https://circleci.com/gh/jgkamat/DoCIF.svg?&style=svg)](https://circleci.com/gh/jgkamat/DoCIF)
+
 Docker Continuous Integration Framework - A framework for easily testing your project with Docker!
 
 ###DoCIF is in Release Candidate. Please help out to test for bugs before the first release!
