@@ -10,7 +10,7 @@ machine:
     GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}d0d73204e90714b6c
     GH_EMAIL: jaysdocbot@jgkamat.33mail.com
     GH_USER: jaysdocbot
-    TEST_ENV_VARS: hello world
+    TEST_ENV_VARS: "hello_world"
 
 checkout:
   post:
