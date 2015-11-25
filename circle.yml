@@ -19,6 +19,7 @@ checkout:
 
 dependencies:
   pre:
+    - ./.testing/detachSubmodule.sh
     - ./.testing/setupTests.sh
       # set build status to pending on start
     - ./.testing/DoCIF/util/maketest.sh --pending
