@@ -22,11 +22,12 @@ else
 	if [ -n "$SETUP_COMMAND" ]; then
 		set +e
 		docker run \
-			   --entrypoint="/bin/bash" \
-			   $(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
-			   $(eval echo \"$(${DIR}/../util/docker_common.sh print_environment_flags)\") \
-			   -v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} ${BASEIMAGE_REPO}:in_progress \
-			   -c "${SETUP_COMMAND}"
+			--entrypoint="/bin/bash" \
+			--cidfile="/tmp/docif.cid" \
+			$(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
+			$(eval echo \"$(${DIR}/../util/docker_common.sh print_environment_flags)\") \
+			-v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} ${BASEIMAGE_REPO}:in_progress \
+			-c "${SETUP_COMMAND}"
 		if [ $? -ne 0 ]; then
 			echo "[ERR] Your setup command FAILED. Exiting..." >&2
 			${DOCIF_ROOT}/util/maketest.sh --fail
@@ -37,7 +38,8 @@ else
 		echo "[WARN] No setup command was supplied. Using bare baseimage environment." >&2
 	fi
 
-	docker commit "$(docker ps -aq | head -n1)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+	docker commit "$(cat /tmp/docif.cid)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+	rm /tmp/docif.cid
 
 	if [ -n "$DOCKER_PASSWORD" -a -n "$DOCKER_EMAIL" -a -n "$DOCKER_USERNAME" ]; then
 		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
