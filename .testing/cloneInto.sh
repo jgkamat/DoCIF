@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-# A simple script to detach a git submodule into its own git repo, in the same location
+# A simple script to clone this repo in itself.
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$DIR"

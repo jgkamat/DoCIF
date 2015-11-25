@@ -19,13 +19,13 @@ checkout:
 
 dependencies:
   pre:
-    - ./.testing/detachSubmodule.sh
-    - ./.testing/setupTests.sh
+    - ./.testing/cloneInto.sh
+    - ./.testing/.testing/setupTests.sh
       # set build status to pending on start
-    - ./.testing/DoCIF/util/maketest.sh --pending
-    - ./.testing/DoCIF/commands/buildbaseimage.sh
+    - ./.testing/util/maketest.sh --pending
+    - ./.testing/commands/buildbaseimage.sh
       # Actually the test step, but we want to cache it so it can go here.
-    - ./.testing/DoCIF/commands/runtests.sh
+    - ./.testing/commands/runtests.sh
   cache_directories:
     - ~/.ccache # See $CACHE_DIRECTORIES in sample_config.docif
 
@@ -38,4 +38,4 @@ deployment:
   github:
     branch: master
     commands:
-      - ./.testing/DoCIF/commands/deploy.sh # This will run DEPLOY_COMMAND as well
+      - ./.testing/commands/deploy.sh # This will run DEPLOY_COMMAND as well
