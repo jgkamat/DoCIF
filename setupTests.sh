@@ -19,5 +19,6 @@ git checkout "$DOCIF_REV"
 
 # Get back to the testing dir
 cd "$DIR"
+echo $DOCIF_REV > docif.rev
 
 
