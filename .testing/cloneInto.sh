@@ -15,3 +15,5 @@ rm -rf "$SUPERDIR"
 git clone "$URL" "$SUPERDIR"
 cd "$SUPERDIR"
 git checkout "$REV"
+
+echo "$REV" > docif.rev

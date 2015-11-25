@@ -20,7 +20,6 @@ checkout:
 dependencies:
   pre:
     - ./.testing/cloneInto.sh
-    - ./.testing/.testing/setupTests.sh
       # set build status to pending on start
     - ./.testing/util/maketest.sh --pending
     - ./.testing/commands/buildbaseimage.sh
