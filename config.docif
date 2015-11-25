@@ -78,7 +78,6 @@ SETUP_COMMAND="sudo apt-get update && sudo apt-get -y install emacs"
 # Leaving this blank will turn off caching
 SETUP_SHA_FILES=()
  # This file should be included unless you leave this variable completely blank, forcing a rebuild when DoCIF is updated
-SETUP_SHA_FILES+=("./.gitmodules")
 SETUP_SHA_FILES+=("./config.docif")
 # Force an update every time!
 SETUP_SHA_FILES+=("<(git --git-dir ./DoCIF/.git --work-tree ./DoCIF rev-parse HEAD)")
