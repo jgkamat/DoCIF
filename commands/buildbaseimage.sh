@@ -65,11 +65,11 @@ else
 			echo "[INFO] Pushing baseimage in the background..."
 
 			# run in subshell
-			(
+			nohup sh -c "(
 				touch ${TMP_FOLDER}/push_baseimage.lock
 				docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
 				echo "${?}" > ${TMP_FOLDER}/push_baseimage.lock
-			) &
+			) >/dev/null 2>&1 &"
 		fi
 
 	else
