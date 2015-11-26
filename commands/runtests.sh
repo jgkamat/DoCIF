@@ -51,7 +51,7 @@ if [ -r "${TMP_FOLDER}/push_baseimage.lock" ]; then
 	if [ -f ${TMP_FOLDER}/push_baseimage.lock ]; then
 		while [ -z "$(cat ${TMP_FOLDER}/push_baseimage.lock)" ]; do
 			sleep 1
-			COUNTER="$(expr "$COUNTER + 1")"
+			COUNTER="$(expr "$COUNTER" + 1)"
 			if [ "$COUNTER" -gt "$TIMEOUT" ]; then
 				# Break out of loop by forcing a failure
 				echo "[ERR] Push command timed out!" >&2
