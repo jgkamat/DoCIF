@@ -1,10 +1,8 @@
 #!/bin/bash
 # Builds our baseimage if needed
 set -e
-
 DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/../util/docker_common.sh
-
 if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositories/${BASEIMAGE_REPO}/tags |  fgrep -q "\"name\": \"${CACHING_SHA}\""; then
 	# The tag currently exists, and can be pulled
 	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
@@ -18,12 +16,11 @@ else
 		exit 1
 	fi
 	set -e
-
 	if [ -n "$SETUP_COMMAND" ]; then
 		set +e
 		docker run \
 			--entrypoint="/bin/bash" \
-			--cidfile="/tmp/docif.cid" \
+			--cidfile="${TMP_FOLDER}/docif_baseimage.cid" \
 			$(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
 			$(eval echo \"$(${DIR}/../util/docker_common.sh print_environment_flags)\") \
 			-v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} ${BASEIMAGE_REPO}:in_progress \
@@ -34,12 +31,16 @@ else
 			exit 1
 		fi
 		set -e
+		if [ ! -f "${TMP_FOLDER}/docif_baseimage.cid" ]; then
+			echo "[ERR] Your setup command did not produce a usable container. This is likely a config or infra issue." >&2
+			exit 1
+		fi
+		docker commit "$(cat ${TMP_FOLDER}/docif_baseimage.cid)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+		rm "${TMP_FOLDER}/docif_baseimage.cid"
 	else
 		echo "[WARN] No setup command was supplied. Using bare baseimage environment." >&2
+		docker tag ${BASEIMAGE_REPO}:in_progress ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
 	fi
-
-	docker commit "$(cat /tmp/docif.cid)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
-	rm /tmp/docif.cid
 
 	if [ -n "$DOCKER_PASSWORD" -a -n "$DOCKER_EMAIL" -a -n "$DOCKER_USERNAME" ]; then
 		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
@@ -48,7 +49,6 @@ else
 			echo "[WARN] Docker login FAILED. This most likeley means invalid credentials. Exiting..." >&2
 			exit 1
 		fi
-
 		if [ "$PUSH_BASEIMAGE" = "true" ]; then
 			set +e
 			docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
@@ -61,5 +61,4 @@ else
 		echo "[WARN] Docker credentials not found. Skipping push." >&2
 	fi
 fi
-
 docker tag -f ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} ${BASEIMAGE_REPO}:current
