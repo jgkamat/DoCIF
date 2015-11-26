@@ -3,21 +3,27 @@
 set -e
 DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/../util/docker_common.sh
+
+
 if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositories/${BASEIMAGE_REPO}/tags |  fgrep -q "\"name\": \"${CACHING_SHA}\""; then
 	# The tag currently exists, and can be pulled
 	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
 else
 	# The tag does not exist, let's build it!
 	set +e
+
 	docker build -t "${BASEIMAGE_REPO}:in_progress"  -f "${DOCKERFILE}" .
+
 	if [ $? -ne 0 ]; then
 		echo "[ERR] The Dockerfile build FAILED. Please report this if using the default dockerfile. Exiting..." >&2
 		${DOCIF_ROOT}/util/maketest.sh --fail
 		exit 1
 	fi
 	set -e
+
 	if [ -n "$SETUP_COMMAND" ]; then
 		set +e
+
 		docker run \
 			--entrypoint="/bin/bash" \
 			--cidfile="${TMP_FOLDER}/docif_baseimage.cid" \
@@ -30,35 +36,47 @@ else
 			${DOCIF_ROOT}/util/maketest.sh --fail
 			exit 1
 		fi
+
 		set -e
+
 		if [ ! -f "${TMP_FOLDER}/docif_baseimage.cid" ]; then
 			echo "[ERR] Your setup command did not produce a usable container. This is likely a config or infra issue." >&2
 			exit 1
 		fi
+
 		docker commit "$(cat ${TMP_FOLDER}/docif_baseimage.cid)" ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
-		rm "${TMP_FOLDER}/docif_baseimage.cid"
+		rm -f "${TMP_FOLDER}/docif_baseimage.cid"
 	else
 		echo "[WARN] No setup command was supplied. Using bare baseimage environment." >&2
-		docker tag ${BASEIMAGE_REPO}:in_progress ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+		docker tag -f ${BASEIMAGE_REPO}:in_progress ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
 	fi
 
 	if [ -n "$DOCKER_PASSWORD" -a -n "$DOCKER_EMAIL" -a -n "$DOCKER_USERNAME" ]; then
+
 		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
 		# Exit on failed login
 		if [ $? -ne 0 ]; then
 			echo "[WARN] Docker login FAILED. This most likeley means invalid credentials. Exiting..." >&2
 			exit 1
 		fi
+
 		if [ "$PUSH_BASEIMAGE" = "true" ]; then
-			set +e
-			docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+			echo "[INFO] Pushing baseimage in the background..."
+
+			docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} &
+
+			# Write baseimage PID to the tmp folder
+			echo "$!" > ${TMP_FOLDER}/push_baseimage.lock
+
 			if [ $? -ne 0 ]; then
 				echo "[WARN] The push to the source repository FAILED. This usually means the dockerhub is down." >&2
 			fi
-			set -e
 		fi
+
 	else
 		echo "[WARN] Docker credentials not found. Skipping push." >&2
 	fi
 fi
+
 docker tag -f ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} ${BASEIMAGE_REPO}:current

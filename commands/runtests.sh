@@ -2,11 +2,14 @@
 # Builds our circle image which runs tests
 set -e
 DIR=$(cd $(dirname $0) ; pwd -P)
+
 source ${DIR}/../util/docker_common.sh
 TEST_CMD="maketest.sh"
+
 if [ "$1" = "--pending" ]; then
 	TEST_CMD="${TEST_CMD} --pending"
 fi
+
 # Entrypiont is needed to preserve exit code
 docker run \
 	--cidfile="${TMP_FOLDER}/docif_tests.cid" \
@@ -20,6 +23,8 @@ docker run \
 	--entrypoint /bin/bash \
 	${BASEIMAGE_REPO}:${CACHING_SHA:-latest} \
 	-c "${GIT_CLONE_ROOT}$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/${TEST_CMD}"
+
+
 EXIT=$?
 if [ $EXIT -ne 0 ]; then
 	exit $EXIT
@@ -29,6 +34,22 @@ if [ ! -f "${TMP_FOLDER}/docif_tests.cid" ]; then
 	echo "[ERR] Your tests command did not produce a usable container. This is likely a config or infra issue." >&2
 	exit 1
 fi
+
 # Commit the latest image
 docker commit "$(cat ${TMP_FOLDER}/docif_tests.cid)" ${IMAGE_NAME_CI}:${COMMIT_SHA}
-rm "${TMP_FOLDER}/docif_tests.cid"
+rm -f "${TMP_FOLDER}/docif_tests.cid"
+
+# Wait for push to finish if possible
+if [ -r "${TMP_FOLDER}/push_baseimage.lock" ]; then
+	echo "[INFO] Waiting for the baseimage push to complete."
+
+	set +e
+	# Wait for the push to baseimage to finish
+	wait "$(cat ${TMP_FOLDER}/push_baseimage.lock)"
+	if [ $? -ne 0 ]; then
+		echo "[WARN] The push to the source repository FAILED. This usually means the dockerhub is down." >&2
+	fi
+	set -e
+
+	rm -f ${TMP_FOLDER}/push_baseimage.lock
+fi

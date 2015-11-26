@@ -4,9 +4,11 @@
 set -e
 COMMON_DIR=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/
 DOCIF_ROOT=$(cd ${COMMON_DIR} && git rev-parse --show-toplevel)
+
 usage() {
 	echo "An internal error occured. Please report this."
 }
+
 get_repo_root() {
 	# Get outside of DoCIF
 	cd ${DOCIF_ROOT}/../
@@ -16,6 +18,7 @@ get_repo_root() {
 	fi
 	echo $(git rev-parse --show-toplevel)
 }
+
 PROJECT_ROOT="$(get_repo_root)"
 
 gen_temp() {
@@ -28,12 +31,15 @@ gen_temp() {
 	fi
 	echo "$TMP_LOC"
 }
+
 # set TMP_FOLDER
 TMP_FOLDER="$(gen_temp)"
+
 run_in_project() {
 	cd ${PROJECT_ROOT}
 	$@
 }
+
 # Checks to see if a variable is empty or not
 check_variable() {
 	if [ -z "$(eval echo "\$${1}")" ]; then
@@ -41,6 +47,7 @@ check_variable() {
 		exit 1
 	fi
 }
+
 # Source docif config
 source_config() {
 	cd ${PROJECT_ROOT}
@@ -53,6 +60,7 @@ source_config() {
 		exit 1
 	fi
 }
+
 get_setup_sha() {
 	if [ -z "${SETUP_SHA_FILES[*]}" ]; then
 		echo "[WARN] No SHA Files found, caching will not take place" >&2
@@ -69,27 +77,33 @@ get_setup_sha() {
 	cd ${PROJECT_ROOT}
 	cat ${SETUP_SHA_FILES[*]} | sha256sum | awk '{print $1}'
 }
+
 get_commit_sha() {
 	cd ${PROJECT_ROOT}
 	echo "$(git rev-parse HEAD)"
 }
+
 # Source config file!
 source_config
 CACHING_SHA="$(get_setup_sha)"
 COMMIT_SHA="$(get_commit_sha)"
 check_variable "TEST_COMMANDS"
+
+
 print_environment_flags() {
 	for i in "${ENV_VARS[@]}"; do
 		printf " -e \"${i}\"=\"\${$i}\" "
 	done
 	printf "\n"
 }
+
 print_cache_flags() {
 	for i in "${CACHE_DIRECTORIES[@]}"; do
 		printf " -v $(echo $i | sed 's/~/${HOME}/' | sed 's/^\./$(pwd)/'):$(echo $i | sed 's%~%/home/developer%' | sed "s%^\.%${DOCKER_PROJECT_ROOT}%") "
 	done
 	printf "\n"
 }
+
 # This converts our secrets to standard variables we can use throughout DoCIF
 standardize_env_vars() {
 	# Any of these could be empty if you wanted, that turns off features though.
@@ -116,6 +130,7 @@ standardize_env_vars() {
 		DOCKERFILE="${PROJECT_ROOT}/${CUSTOM_DOCKERFILE}"
 	fi
 }
+
 standardize_env_vars
 # Don't run things if being sourced
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
