@@ -44,9 +44,23 @@ if [ -r "${TMP_FOLDER}/push_baseimage.lock" ]; then
 	echo "[INFO] Waiting for the baseimage push to complete."
 
 	set +e
+
+	COUNTER=0
+	TIMEOUT=600
 	# Wait for the push to baseimage to finish
-	wait "$(cat ${TMP_FOLDER}/push_baseimage.lock)"
-	if [ $? -ne 0 ]; then
+	if [ -f ${TMP_FOLDER}/push_baseimage.lock ]; then
+		while [ -z "$(cat ${TMP_FOLDER}/push_baseimage.lock)" ]; do
+			sleep 1
+			COUNTER="$(expr "$COUNTER + 1")"
+			if [ "$COUNTER" -gt "$TIMEOUT" ]; then
+				# Break out of loop by forcing a failure
+				echo "[ERR] Push command timed out!" >&2
+				echo "1" > "${TMP_FOLDER}/push_baseimage.lock"
+			fi
+		done
+	fi
+
+	if [ "$(cat ${TMP_FOLDER}/push_baseimage.lock)" -ne 0 ]; then
 		echo "[WARN] The push to the source repository FAILED. This usually means the dockerhub is down." >&2
 	fi
 	set -e

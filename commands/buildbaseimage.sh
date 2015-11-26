@@ -64,14 +64,12 @@ else
 		if [ "$PUSH_BASEIMAGE" = "true" ]; then
 			echo "[INFO] Pushing baseimage in the background..."
 
-			docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} &
-
-			# Write baseimage PID to the tmp folder
-			echo "$!" > ${TMP_FOLDER}/push_baseimage.lock
-
-			if [ $? -ne 0 ]; then
-				echo "[WARN] The push to the source repository FAILED. This usually means the dockerhub is down." >&2
-			fi
+			# run in subshell
+			(
+				touch ${TMP_FOLDER}/push_baseimage.lock
+				docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+				echo "${?}" > ${TMP_FOLDER}/push_baseimage.lock
+			) &
 		fi
 
 	else
