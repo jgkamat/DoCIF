@@ -25,12 +25,11 @@ else
 		set +e
 
 		docker run \
-			--entrypoint="/bin/bash" \
 			--cidfile="${TMP_FOLDER}/docif_baseimage.cid" \
 			$(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
 			$(eval echo \"$(${DIR}/../util/docker_common.sh print_environment_flags)\") \
 			-v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} ${BASEIMAGE_REPO}:in_progress \
-			-c "${SETUP_COMMAND}"
+			"${SETUP_COMMAND}"
 		if [ $? -ne 0 ]; then
 			echo "[ERR] Your setup command FAILED. Exiting..." >&2
 			${DOCIF_ROOT}/util/maketest.sh --fail
