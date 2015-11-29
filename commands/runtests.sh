@@ -21,7 +21,7 @@ docker run \
 	-e ${GH_EMAIL_VAR}=${GH_EMAIL} \
 	-e ${GH_STATUS_TOKEN_VAR}=${GH_STATUS_TOKEN} \
 	${BASEIMAGE_REPO}:${CACHING_SHA:-latest} \
-	"${GIT_CLONE_ROOT}$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/${TEST_CMD}"
+	sh -c "${GIT_CLONE_ROOT}$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/${TEST_CMD}"
 
 
 EXIT=$?
