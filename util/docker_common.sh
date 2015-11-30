@@ -83,6 +83,15 @@ get_commit_sha() {
 	echo "$(git rev-parse HEAD)"
 }
 
+clean_cid_file() {
+	if [ -n "$1" ]; then
+		if [ -e "$1" ]; then
+			echo "[WARN] A CID file was found, this could mean DoCIF was interrupted." >&2
+			rm -f "$1"
+		fi
+	fi
+}
+
 # Source config file!
 source_config
 CACHING_SHA="$(get_setup_sha)"
