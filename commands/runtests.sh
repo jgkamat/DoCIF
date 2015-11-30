@@ -43,6 +43,7 @@ wait_push() {
 
 trap "wait_push" EXIT
 
+clean_cid_file "${TMP_FOLDER}/docif_tests.cid"
 
 docker run \
 	--cidfile="${TMP_FOLDER}/docif_tests.cid" \

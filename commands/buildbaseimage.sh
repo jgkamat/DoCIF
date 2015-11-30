@@ -22,6 +22,8 @@ else
 	set -e
 
 	if [ -n "$SETUP_COMMAND" ]; then
+		clean_cid_file "${TMP_FOLDER}/docif_baseimage.cid"
+
 		set +e
 
 		docker run \

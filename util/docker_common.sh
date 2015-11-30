@@ -83,6 +83,15 @@ get_commit_sha() {
 	echo "$(git rev-parse HEAD)"
 }
 
+clean_cid_file() {
+	if [ -n "$1" ]; then
+		if [ -e "$1" ]; then
+			echo "[WARN] A CID file was found, this could mean DoCIF was interrupted." >&2
+			rm -f "$1"
+		fi
+	fi
+}
+
 # Source config file!
 source_config
 CACHING_SHA="$(get_setup_sha)"
@@ -116,7 +125,7 @@ standardize_env_vars() {
 	PENGING_URL="${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}"
 	CLEAN_COMMAND="${CLEAN_COMMAND:-"true"}"
 	PUSH_BASEIMAGE="${PUSH_BASEIMAGE:-"false"}"
-	DOCKER_PROJECT_HOME="${DOCKER_PROJECT_ROOT:-"/root"}"
+	DOCKER_PROJECT_HOME="${DOCKER_PROJECT_HOME:-"/root"}"
 	DOCKER_PROJECT_ROOT="${DOCKER_PROJECT_ROOT:-"/root/project"}"
 	GIT_CLONE_ROOT="${GIT_CLONE_ROOT:-"${DOCKER_PROJECT_ROOT}"}"
 
