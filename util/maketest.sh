@@ -84,7 +84,7 @@ elif [ "$1" = "--fail" ]; then
 fi
 
 # Go to root so we can make.
-cd ${PROJECT_ROOT}
+cd ${DOCKER_PROJECT_ROOT}
 
 # Clean
 git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
