@@ -103,7 +103,9 @@ for i in "${CACHE_DIRECTORIES[@]}"; do
 	fi
 done
 
-sh -c "$CLEAN_COMMAND"
+if [ "$PENDING" != "true" ]; then
+	sh -c "$CLEAN_COMMAND"
+fi
 
 for i in "${TEST_COMMANDS[@]}"; do
 	ci_task "$i"
