@@ -84,7 +84,10 @@ elif [ "$1" = "--fail" ]; then
 fi
 
 # Go to root so we can make.
-cd ${DOCKER_PROJECT_ROOT}
+if [ "$PENDING" != "true" ]; then
+	# We don't want to CD during the pending phase, as we are not in the docker container yet
+	cd ${DOCKER_PROJECT_ROOT}
+fi
 
 # Clean
 git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
