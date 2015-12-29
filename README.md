@@ -13,7 +13,7 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
 * Git managed project and `git 2.0+`
 * [Docker](https://www.docker.com) installed on your system or continuous integration
 * Bash on a POSIX (preferrably GNU) system.
-* CircleCi Continuous Integration. The features included in DoCIF take adavantage of it's features, such as artifact deployment, and caching.
+* CircleCi Continuous Integration. The features included in DoCIF take adavantage of its features, such as artifact deployment, and caching.
 
 ## Setup
 Setup of DoCIF is designed to be easy, assuming you know how to set up your project on a linux machine!

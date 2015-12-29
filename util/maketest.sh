@@ -24,9 +24,9 @@ start_pending() {
 
 	SHORTNAME="$1"
 	>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-	 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-	 -H "Content-Type: application/json" \
-	 -d '{"state":"pending", "description": "This check is pending. Please wait.", "context": '"\"circle/$SHORTNAME\""', "target_url": "'"${PENDING_URL}"'"}'
+		-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+		-H "Content-Type: application/json" \
+		-d '{"state":"pending", "description": "This check is pending. Please wait.", "context": '"\"circle/$SHORTNAME\""', "target_url": "'"${PENDING_URL}"'"}'
 }
 
 fail_test() {
@@ -37,9 +37,9 @@ fail_test() {
 
 	SHORTNAME="$1"
 	>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-	 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-	 -H "Content-Type: application/json" \
-	 -d '{"state":"failure", "description": "This check failed due to an internal error.", "context": '"\"circle/$SHORTNAME\""', "target_url": "'"${PENDING_URL}"'"}'
+		-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+		-H "Content-Type: application/json" \
+		-d '{"state":"failure", "description": "This check failed due to an internal error.", "context": '"\"circle/$SHORTNAME\""', "target_url": "'"${PENDING_URL}"'"}'
 }
 
 # A function to run a command. Takes in a command name, shortname and description.
@@ -65,14 +65,14 @@ ci_task() {
 
 	if [ "${CMD_STATUS}" = "0" ]; then
 		>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-		 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-		 -H "Content-Type: application/json" \
-		 -d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+			-H "Content-Type: application/json" \
+			-d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
 	else
 		>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-		 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-		 -H "Content-Type: application/json" \
-		 -d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+			-H "Content-Type: application/json" \
+			-d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
 		SUCCESS=false
 	fi
 }
