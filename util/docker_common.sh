@@ -2,7 +2,6 @@
 #
 # Provides common vars if sourced, provides commonly used function if run with args
 set -e
-
 COMMON_DIR=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)/
 DOCIF_ROOT=$(cd ${COMMON_DIR} && git rev-parse --show-toplevel)
 
@@ -10,20 +9,31 @@ usage() {
 	echo "An internal error occured. Please report this."
 }
 
-# TODO check to see if outside repo actually exists
 get_repo_root() {
 	# Get outside of DoCIF
 	cd ${DOCIF_ROOT}/../
-
 	if ! git rev-parse --show-toplevel >/dev/null 2>&1; then
 		echo "[ERR] DoCIF is not within a git repository and cannot continue." >&2
 		exit 1
 	fi
-
 	echo $(git rev-parse --show-toplevel)
 }
 
 PROJECT_ROOT="$(get_repo_root)"
+
+gen_temp() {
+	# Generates a tmp folder if one does not exist yet.
+	if [ -r "/tmp/docif.tmp" ] && [ -d "$(cat /tmp/docif.tmp)" ]; then
+		TMP_LOC="$(cat /tmp/docif.tmp)"
+	else
+		TMP_LOC="$(mktemp -d /tmp/docif.XXXXXXXX)"
+		echo "$TMP_LOC" > /tmp/docif.tmp
+	fi
+	echo "$TMP_LOC"
+}
+
+# set TMP_FOLDER
+TMP_FOLDER="$(gen_temp)"
 
 run_in_project() {
 	cd ${PROJECT_ROOT}
@@ -56,7 +66,6 @@ get_setup_sha() {
 		echo "[WARN] No SHA Files found, caching will not take place" >&2
 		return 0
 	fi
-
 	for i in "${SETUP_SHA_FILES[@]}"; do
 		# prevent variable errors later
 		i="$i"
@@ -65,7 +74,6 @@ get_setup_sha() {
 			exit 1
 		fi
 	done
-
 	cd ${PROJECT_ROOT}
 	cat ${SETUP_SHA_FILES[*]} | sha256sum | awk '{print $1}'
 }
@@ -75,12 +83,21 @@ get_commit_sha() {
 	echo "$(git rev-parse HEAD)"
 }
 
+clean_cid_file() {
+	if [ -n "$1" ]; then
+		if [ -e "$1" ]; then
+			echo "[WARN] A CID file was found, this could mean DoCIF was interrupted." >&2
+			rm -f "$1"
+		fi
+	fi
+}
+
 # Source config file!
 source_config
 CACHING_SHA="$(get_setup_sha)"
 COMMIT_SHA="$(get_commit_sha)"
-
 check_variable "TEST_COMMANDS"
+
 
 print_environment_flags() {
 	for i in "${ENV_VARS[@]}"; do
@@ -91,7 +108,7 @@ print_environment_flags() {
 
 print_cache_flags() {
 	for i in "${CACHE_DIRECTORIES[@]}"; do
-		printf " -v $(echo $i | sed 's/~/${HOME}/' | sed 's/^\./$(pwd)/'):$(echo $i | sed 's%~%/home/developer%' | sed "s%^\.%${DOCKER_PROJECT_ROOT}%") "
+		printf " -v $(echo $i | sed 's/~/${HOME}/' | sed 's/^\./$(pwd)/'):$(echo $i | sed "s%~%${DOCKER_PROJECT_HOME}%" | sed "s%^\.%${DOCKER_PROJECT_ROOT}%") "
 	done
 	printf "\n"
 }
@@ -105,22 +122,18 @@ standardize_env_vars() {
 	GH_STATUS_TOKEN="$(eval echo "\$${GH_STATUS_TOKEN_VAR}")"
 	GH_USERNAME="$(eval echo "\$${GH_USER_VAR}")"
 	GH_EMAIL="$(eval echo "\$${GH_EMAIL_VAR}")"
-
 	PENGING_URL="${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}"
 	CLEAN_COMMAND="${CLEAN_COMMAND:-"true"}"
 	PUSH_BASEIMAGE="${PUSH_BASEIMAGE:-"false"}"
-
-	DOCKER_PROJECT_ROOT="${DOCKER_PROJECT_ROOT:-"/home/developer/project"}"
+	DOCKER_PROJECT_HOME="${DOCKER_PROJECT_HOME:-"/root"}"
+	DOCKER_PROJECT_ROOT="${DOCKER_PROJECT_ROOT:-"/root/project"}"
 	GIT_CLONE_ROOT="${GIT_CLONE_ROOT:-"${DOCKER_PROJECT_ROOT}"}"
-
 
 	if [ -z "$ENV_VARS" ]; then
 		ENV_VARS=()
 	fi
-
 	ENV_VARS+=("CIRCLE_BUILD_NUM")
 	ENV_VARS+=("CIRCLE_ARTIFACTS")
-
 	if [ -z "${CUSTOM_DOCKERFILE}" ]; then
 		DOCKERFILE="${DOCIF_ROOT}/commands/Dockerfile"
 	else
@@ -129,7 +142,6 @@ standardize_env_vars() {
 }
 
 standardize_env_vars
-
 # Don't run things if being sourced
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 	# Run commands if requested

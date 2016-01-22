@@ -19,7 +19,7 @@ checkout:
 
 dependencies:
   pre:
-      # set build status to pending on start
+      # Set build status to pending on start
     - ./DoCIF/util/maketest.sh --pending
     - ./DoCIF/commands/buildbaseimage.sh
       # Actually the test step, but we want to cache it so it can go here.

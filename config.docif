@@ -1,10 +1,10 @@
 #!/bin/bash
 #
 # THIS IS NOT A SAMPLE CONFIG.DOCIF
-# THIS FILES IS UESED BY DOCIF'S CONTINUOUS INTEGRATION.
+# THIS FILE IS USED BY DOCIF'S CONTINUOUS INTEGRATION.
 
 # @REQUIRED
-# A docker baseimage repostiory. Create one on the docker hub
+# A docker baseimage repository. Create one on the docker hub
 BASEIMAGE_REPO="jgkamat/testdocif-baseimage"
 
 # If true, ${BASEIMAGE_REPO}:master is pushed when on master.
@@ -12,7 +12,7 @@ BASEIMAGE_REPO="jgkamat/testdocif-baseimage"
 PUSH_BASEIMAGE="true"
 
 # @REQUIRED
-# The github repository location, for sendings status updates to
+# The github repository location, for sending status updates to
 # This is CASE SENSITIVE!!
 GITHUB_REPO='jgkamat/DoCIF'
 
@@ -47,7 +47,7 @@ GH_EMAIL_VAR="GH_EMAIL"
 
 
 # The project root INSIDE THE DOCKER CONTAINER
-# Reccomended to leave as default (not set)
+# Recommended to leave as default (not set)
 # This will act as the 'current directory' within the project
 # This will need to be changed in the dockerfile as well to take effect. (use a custom one!)
 # DOCKER_PROJECT_ROOT="/home/developer/project"
@@ -69,7 +69,7 @@ CACHE_DIRECTORIES+=('~/.ccache')
 ################################# COMMANDS #####################################
 
 # The script to set up the environment, by default ubuntu.
-# YOU WILL NEED TO USE SUDO TO GET ROOT PRIVLEGES HERE
+# YOU WILL NEED TO USE SUDO TO GET ROOT PRIVILEGES HERE
 SETUP_COMMAND="sudo apt-get update && sudo apt-get -y install htop"
 # SETUP_COMMAND="./ubuntu-setup-script"
 
@@ -83,16 +83,17 @@ SETUP_SHA_FILES+=("./config.docif")
 SETUP_SHA_FILES+=("./.testing/docif.rev")
 
 # @REQUIRED
-# Commands to run when testing. Each index will have it's own status token
+# Commands to run when testing. Each index will have its own status token
 # Commands are in this format
 # COMMAND; SHORT_NAME; DESCRIPTION
 TEST_COMMANDS=()
 TEST_COMMANDS+=( 'true;basic;A basic test to see if we can get a test up.' )
 TEST_COMMANDS+=( 'command -v htop;test-dependency;Lets see if dependencies were installed.' )
-TEST_COMMANDS+=( 'true && true;test-complex;Test if we can handle complex bash commands (in tests)' )
+TEST_COMMANDS+=( 'true && [ "root" = "`whoami`" ];test-complex;Test if we can handle complex bash commands (in tests)' )
 TEST_COMMANDS+=( '[ -n "$TEST_ENV_VARS" ];test-external-vars;Test if external variables make it into the container' )
+TEST_COMMANDS+=( 'cd /bin && [ -e bash ];test-cd-dir;Test if a cd command works' )
 
-# @RECCOMENDED
+# @RECOMMENDED
 # Clean command. Cleans the build files so there is no way the previous build can interfere. Add if you run
 # into issues
 CLEAN_COMMAND="true"
