@@ -8,7 +8,7 @@ MAINTAINER Jay Kamat github@jgkamat.33mail.com
 ENV DEBIAN_FRONTEND noninteractive
 
 # Use UTF-8, fixes some hard to debug issues
-# This is not workin on cirlceci's current setup. Will reenable once its working again
+# This is not workin on cirlceci's current setup. Will reenable once it's working again
 # RUN locale-gen en_US.UTF-8
 # ENV LANG en_US.UTF-8
 
