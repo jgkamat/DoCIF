@@ -9,7 +9,8 @@ source ${DIR}/docker_common.sh
 
 # Get sha sum
 SUCCESS=true
-LINK_PREFIX="https://circle-artifacts.com/gh/${GITHUB_REPO}/${CIRCLE_BUILD_NUM}/artifacts/0$CIRCLE_ARTIFACTS/"
+# Allow for use of the link_prefix in other programs, if they need it
+export LINK_PREFIX="https://circle-artifacts.com/gh/${GITHUB_REPO}/${CIRCLE_BUILD_NUM}/artifacts/0$CIRCLE_ARTIFACTS/"
 ARTIFACT_DIR="/tmp/build_artifacts"
 mkdir -p ${ARTIFACT_DIR}
 PENDING=false
