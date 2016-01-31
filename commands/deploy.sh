@@ -8,7 +8,7 @@ source ${DIR}/../util/docker_common.sh
 
 docker tag -f ${BASEIMAGE_REPO}:current ${BASEIMAGE_REPO}:master
 
-if [ -n "$DOCKER_PASSWORD" -o -n "$DOCKER_USERNAME" -o -n "$DOCKER_EMAIL" ]; then
+if [ -n "$DOCKER_PASSWORD" -a -n "$DOCKER_USERNAME" -a -n "$DOCKER_EMAIL" ]; then
 	if [ "$PUSH_BASEIMAGE" = "true" ]; then
 		docker login -e $DOCKER_EMAIL -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
@@ -19,6 +19,8 @@ if [ -n "$DOCKER_PASSWORD" -o -n "$DOCKER_USERNAME" -o -n "$DOCKER_EMAIL" ]; the
 		fi
 		set -e
 	fi
+else
+	echo "[WARN] Docker credentials not set! Set DOCKER_EMAIL_VAR, DOCKER_PASWORD_VAR, and DOCKER_USERNAME_VAR" >&2
 fi
 
 if [ -n "$DEPLOY_COMMAND" ]; then

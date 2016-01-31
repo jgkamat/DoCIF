@@ -45,6 +45,7 @@ trap "wait_push" EXIT
 
 clean_cid_file "${TMP_FOLDER}/docif_tests.cid"
 
+set +e
 docker run \
 	--cidfile="${TMP_FOLDER}/docif_tests.cid" \
 	$(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
@@ -57,8 +58,8 @@ docker run \
 	${BASEIMAGE_REPO}:${CACHING_SHA:-latest} \
 	sh -c "${GIT_CLONE_ROOT}$(echo ${DOCIF_ROOT} | sed "s%${PROJECT_ROOT}%%g")/util/${TEST_CMD}"
 
-
 EXIT=$?
+set -e
 
 
 if [ ! -f "${TMP_FOLDER}/docif_tests.cid" ]; then
