@@ -6,7 +6,7 @@ source ${DIR}/../util/docker_common.sh
 
 
 if [ -n "$CACHING_SHA" ] && curl -s https://registry.hub.docker.com/v1/repositories/${BASEIMAGE_REPO}/tags/${CACHING_SHA} \
-		| head -n1 | fgrep -q "200"; then
+	-o /dev/null -w "%{http_code}" | fgrep -q '200'; then
 	# The tag currently exists, and can be pulled
 	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
 else
