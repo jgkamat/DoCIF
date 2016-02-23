@@ -56,7 +56,7 @@ ci_task() {
 	fi
 
 
-	${CMD} 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
+	eval "${CMD}" 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
 	CMD_STATUS=${PIPESTATUS[0]}
 
 	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
