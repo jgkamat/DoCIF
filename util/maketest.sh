@@ -9,7 +9,8 @@ source ${DIR}/docker_common.sh
 
 # Get sha sum
 SUCCESS=true
-LINK_PREFIX="https://circle-artifacts.com/gh/${GITHUB_REPO}/${CIRCLE_BUILD_NUM}/artifacts/0$CIRCLE_ARTIFACTS/"
+# Allow for use of the link_prefix in other programs, if they need it
+export LINK_PREFIX="https://circle-artifacts.com/gh/${GITHUB_REPO}/${CIRCLE_BUILD_NUM}/artifacts/0$CIRCLE_ARTIFACTS/"
 ARTIFACT_DIR="/tmp/build_artifacts"
 mkdir -p ${ARTIFACT_DIR}
 PENDING=false
@@ -55,7 +56,7 @@ ci_task() {
 	fi
 
 
-	${CMD} 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
+	eval "${CMD}" 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
 	CMD_STATUS=${PIPESTATUS[0]}
 
 	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
