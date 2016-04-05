@@ -19,6 +19,7 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
 * Run your CI Tests in Docker
 * Use Docker to cache your builds to make them run faster (if you have lots of dependencies)
 * Use The GH Status Token API To let you know which one of your tests failed
+  * Easily see what went wrong in each test with automatic deployment of output files and a link in your status message.
 * Run your tests in the environment you want, not the environment someone provides you!
   * Ability to supply your own dockerfile to do this. Be careful though, you could break some things.
   * [DoCIF's tests are run using DoCIF](https://github.com/jgkamat/DoCIF/pull/4). Yes it was hard. It's also a good example of the end result from your point of view.
@@ -52,6 +53,8 @@ Status Entries require a few extra variables to be set properly, as well as a us
 1. Set `GITHUB_REPO` to your repo on github. For example, you would turn https://github.com/alda-lang/alda into `alda-lang/alda`.
 2. Set environmental variables for your GH Status token, username, and email via the circleci web interface (secure) or your circle.yml (insecure). Then place the NAMES of these env variables in `GH_STATUS_TOKEN_VAR`, `GH_USER_VAR`, and `GH_EMAIL_VAR`.
 3. Add multiple `TEST_COMMANDS` to see them come up as individual status tokens.
+
+Once this is done, the logs of each test command can be viewed by clicking 'details' on any of these outputs.
 
 You can debug issues by running the build on circleCi with ssh, and running `bash -x ./path/to/DoCIF/util/maketest.sh --pending` and looking for the output of the curl commands. Those curl commands are docif trying to set status tokens.
 
