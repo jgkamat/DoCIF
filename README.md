@@ -15,6 +15,13 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
 * Bash on a POSIX (preferrably GNU) system.
 * CircleCi Continuous Integration. The features included in DoCIF take adavantage of its features, such as artifact deployment, and caching.
 
+## Features
+* Run your CI Tests in Docker
+* Use Docker to cache your builds to make them run faster (if you have lots of dependencies)
+* Use The GH Status Token API To let you know which one of your tests failed
+* Run your tests in the environment you want, not the environment someone provides you!
+  * Ability to supply your own dockerfile to do this. Be careful though, you could break some things.
+
 ## Setup
 Setup of DoCIF is designed to be easy, assuming you know how to set up your project on a linux machine!
 
@@ -32,6 +39,38 @@ optional, some must be changed.
 3. `cp DoCIF/sample/config.yml ` This will overwrite your existing circle.yml
 4. Add the secrets you told config.docif about into the circleci web interface to use all features.
 5. Enjoy!
+
+## Advanced Features
+
+DoCIF has support for many nice features such as individual GitHub status icons and caching basimages.
+
+#### Status Icons
+
+Status Entries require a few extra variables to be set properly, as well as a user with a GH Status API Token. Look in your config.docif to see some examples of these.
+
+1. Set `GITHUB_REPO` to your repo on github. For example, you would turn https://github.com/alda-lang/alda into `alda-lang/alda`.
+2. Set environmental variables for your GH Status token, username, and email via the circleci web interface (secure) or your circle.yml (insecure). Then place the NAMES of these env variables in `GH_STATUS_TOKEN_VAR`, `GH_USER_VAR`, and `GH_EMAIL_VAR`.
+3. Add multiple `TEST_COMMANDS` to see them come up as individual status tokens.
+
+You can debug issues by running the build on circleCi with ssh, and running `bash -x ./path/to/DoCIF/util/maketest.sh --pending` and looking for the output of the curl commands. Those curl commands are docif trying to set status tokens.
+
+#### Caching Via DockerHub
+
+DoCIF can create a 'baseimage' for you and automatically rebuild it when certain files (setup/dependency files) change.
+
+1. Create an account on the docker hub, and create a normal (not automated build) repository to use as a baseimage push location.
+2. Place your docker user, email, and password into circleci (secure) or circle.yml (insecure). Then set `DOCKER_PASSWORD_VAR`, `DOCKER_EMAIL_VAR`, and `DOCKER_USER_VAR` to the VARIABLE NAMES of the respective credentials.
+3. Add file names as elements to `SETUP_SHA_FILES` to force a rebuild when they change.
+
+## Debugging a DoCIF Error
+
+DoCIF has a bunch of error messages, but they are hard to see at times. Open up the raw output from circleci and search for `[WARN]` and `[ERR]`. All DoCIF error messages will have those headers.
+
+Check to make sure your credentials work
+
+If all else fails, ssh into the circleci node, run `bash -x ./path/to/DoCIF/command` and find where DoCIF went wrong.
+
+If you find a problem within DoCIF itself or want more features, simply submit an issue to this repostiory! :smile:
 
 ## License
 DoCIF is licensed under the GNU LGPLv3. In an incomplete summary, this means you can use DoCIF with any project (even nonfree ones :cry:), but if you mod DoCIF itself, you must license the derivative work under the LGPLv3 or the GPLv3. See the included LICENSE file for details.
