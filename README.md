@@ -21,6 +21,7 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
 * Use The GH Status Token API To let you know which one of your tests failed
 * Run your tests in the environment you want, not the environment someone provides you!
   * Ability to supply your own dockerfile to do this. Be careful though, you could break some things.
+  * [DoCIF's tests are run using DoCIF](https://github.com/jgkamat/DoCIF/pull/4). Yes it was hard. It's also a good example of the end result from your point of view.
 
 ## Setup
 Setup of DoCIF is designed to be easy, assuming you know how to set up your project on a linux machine!
