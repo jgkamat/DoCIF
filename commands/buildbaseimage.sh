@@ -65,11 +65,11 @@ else
 
 		if [ "$PUSH_BASEIMAGE" = "true" ]; then
 			echo "[INFO] Pushing baseimage in the background..."
+			echo "[INFO] Pushing to ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}"
 
 			# run in subshell
 			nohup sh -c "(
 				touch ${TMP_FOLDER}/push_baseimage.lock
-				echo "Pushing to ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}"
 				docker push ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
 				echo "${?}" > ${TMP_FOLDER}/push_baseimage.lock
 			) >/dev/null 2>&1 &"
