@@ -26,7 +26,7 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
 
 ## Documentation
 
-Below, you will find a simple setup guide, buf if you need additional clarification or help with advanced usage, check out the [docs folder of this repo](./doc)
+Below, you will find a simple setup guide, buf if you need additional clarification or help with advanced usage, check out the [docs folder of this repo](./doc/index.org)
 
 ## Setup
 Setup of DoCIF is designed to be easy, assuming you know how to set up your project on a linux machine!
