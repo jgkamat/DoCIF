@@ -1,0 +1,20 @@
+
+#+TITLE: Jay Kamat
+#+AUTHOR: Jay Kamat
+#+EMAIL: jaygkamat@gmail.com
+
+# This is documentation on variables that can go in your config.docif file.
+
+* Config Documentation
+
+** Introduction
+
+This file is a documentation for the config options that you can find in [[file:../sample/sample_config.docif::CACHE_DIRECTORIES%3D()][sample config.docif]].
+** Config file format
+
+The configuration file for DoCIF is a simple shell script setting variables. This script is sourced,
+and variables set there are used. If there is invalid bash expressions, DoCIF will fail.
+`
+The config file should be placed in the root directory of your git project. The file must end with
+~.docif~, and can be either a hidden or a normal file. Having multiple files ending with ~.docif~
+will lead to undefined behavior. In this case ~config.docif~ is preferred.
