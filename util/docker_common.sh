@@ -53,8 +53,8 @@ source_config() {
 	cd ${PROJECT_ROOT}
 	if [ -f "config.docif" ]; then
 		source config.docif
-	elif [ -n "$(ls *.docif | head -n1)" ]; then
-		source "$(ls *.docif | head -n1)"
+	elif [ -n "$(ls -a *.docif | head -n1)" ]; then
+		source "$(ls -a *.docif | head -n1)"
 	else
 		echo "[ERR] No docif config could be found! Exiting!" >&2
 		exit 1
