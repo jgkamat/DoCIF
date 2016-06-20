@@ -1,12 +1,10 @@
 
-#+TITLE: Jay Kamat
 #+AUTHOR: Jay Kamat
 #+EMAIL: jaygkamat@gmail.com
 
 # This is documentation on variables that can go in your config.docif file.
 
 * Config Documentation
-
 ** Introduction
 
 This file is a documentation for the config options that you can find in [[file:../sample/sample_config.docif::CACHE_DIRECTORIES%3D()][sample config.docif]].
@@ -18,3 +16,69 @@ and variables set there are used. If there is invalid bash expressions, DoCIF wi
 The config file should be placed in the root directory of your git project. The file must end with
 ~.docif~, and can be either a hidden or a normal file. Having multiple files ending with ~.docif~
 will lead to undefined behavior. In this case ~config.docif~ is preferred.
+
+Here is an example of setting various types of variables in your docif config
+
+#+BEGIN_SRC sh
+  SIMPLE_VARIABE="setting"
+
+  ARRAY_VARIABLE=()
+  ARRAY_VARIABLE+=("element one")
+  ARRAY_VARIABLE+=("element two")
+#+END_SRC
+
+If a required setting is absent, DoCIF will error that it is missing, and exit.
+
+Variables ending with ~VAR~ such as ~GH_USER_VAR~ should not be populated with the actual github user. Rather, they should point
+to the variable the user is stored in. For example, if I set ~GH_USER_VAR~ = ~MY_VAR~ then you should populate ~MY_VAR~ with
+your github username. I will be referencing such variables 'as pointers' in the below documentation to save space.
+** Concepts
+
+DoCIF projects build in several steps internally, and it helps to know the format that they will take.
+1. Send github a pending status over the github status token api (optional)
+2. Build a baseimage with your dependencies
+   - Optionally push that baseimage to a registry for caching (speeds up builds if this is enabled)
+3. Run your tests, one by one on the baseimage
+4. Pipe the output of these tests to an artifacts directory for uploading (and easy viewing)
+5. Update the github status tokens with passing or failing status, and link the output of the tests to those status details.
+** Config Options
+*** Required Config Options
+
+|---------------------------+-------+--------------------------------+------------------------------------------|
+| Variable Name             | Type  | Example                        | Notes                                    |
+|---------------------------+-------+--------------------------------+------------------------------------------|
+| ~BASIMAGE_REPO~           | Var   | jgkamat/docker-baseimage       | This is the repository on the docker hub we will be caching to if you don't want to cache, put an arbitrary value here and set ~PUSH_BASEIMAGE~ to false |
+| ~PUSH_BASEIMAGE~          | Var   | (true \vert false)                 | If true, we will push to ~BASEIMAGE_REPO~ when we build your baseimage. This speeds up future builds, but needs working docker hub credentials. |
+| ~GITHUB_REPO~             | Var   | jgkamat/DoCIF                  | The repo on github to send status updates to. This is case sensitive. |
+| ~TEST_COMMANDS~           | Array | ~('command;name;description')~ | The array of test commands to run. These commands are executed in order, and each field contains semicolon separated data. This data is parsed, and the command is run. To execute multiple commands, use ~&&~ instead of ~;~ as ~;~ is the separator. |
+| <25>                      | <5>   | <30>                           | <40>                                     |
+|---------------------------+-------+--------------------------------+------------------------------------------|
+
+*** Reccomended Config Options
+
+|---------------------------+-------+--------------------------------+------------------------------------------|
+| Variable Name             | Type  | Example                        | Notes                                    |
+|---------------------------+-------+--------------------------------+------------------------------------------|
+| ~CLEAN_COMMAND~           | Var   | ~command~                      | A command that is used to clean your repository prior to executing any tests. A common example is ~make clean~ |
+| ~SETUP_SHA_FILES~         | Array | =('./config.docif')=           | DoCIF will use these files to determine whether to use a cached baseimage or whether to build a new one. If one of these files changes, a full rebuild is done. This is useful for setup scripts that you have. When not set, caching cannot be used! |
+| <25>                      | <5>   | <30>                           | <40>                                     |
+|---------------------------+-------+--------------------------------+------------------------------------------|
+
+*** Optional Config Options
+
+|---------------------------+-------+--------------------------------+------------------------------------------|
+| Variable Name             | Type  | Example                        | Notes                                    |
+|---------------------------+-------+--------------------------------+------------------------------------------|
+| ~PENDING_URL~             | Var   | http://www.some-website.com    | The link docif will point to when tests are pending |
+| ~DOCKER_PASSWORD_VAR~     | Ptr   | ~DOCKER_PASS~                  | A pointer to your password. For this example, you would set ~DOCKER_PASS~ as your password. |
+| ~DOCKER_EMAIL_VAR~        | Ptr   | ~DOCKER_EMAIL~                 | A pointer to your email. For this example, you would set ~DOCKER_EMAIL~ as your email. |
+| ~DOCKER_USER_VAR~         | Ptr   | ~DOCKER_USER~                  | A pointer to your username. For this example, you would set ~DOCKER_USER~ as your username. |
+| ~GH_STATUS_TOKEN_VAR~     | Ptr   | ~GH_STATUS_TOKEN~              | A pointer to your GH Status token. For this example, you would set ~GH_STATUS_TOKEN~ as your status token. |
+| ~GH_USER_VAR~             | Ptr   | ~GH_USER~                      | A pointer to your GH User. For this example, you would set ~GH_USER~ as your Github User. |
+| ~GH_EMAIL_VAR~            | Ptr   | ~GH_EMAIL~                     | A pointer to your GH Email. For this example, you would set ~GH_EMAIL~ as your email. |
+| ~CACHE_DIRECTORIES~       | Array | ('\tilde/.ccache')                  | An array of cache variables. These should either be absolute references or relative to home (~). Please do not use ${HOME}, as I do some magic to make =~= be the home inside the container. |
+| ~SETUP_COMMAND~           | Var   | ~sudo apt install emacs~       | A command executed to setup your container. This can run a script inside your repo too, by using relative paths! |
+| ~ENV_VARS~                | Array | =("MY_ENV_VAR")=               | An array of environment variables to pass through to the test container. We put this list of variables into the -e flag in docker. The variables will have the same name both inside and outside of the container. |
+| ~DEPLOY_COMMAND~          | Var   | ~make deploy~                  | A command to run when your build passes (perhaps to deploy artifacts somewhere). You can use relative paths to the base of your repository. |
+| <25>                      | <5>   | <30>                           | <40>                                     |
+|---------------------------+-------+--------------------------------+------------------------------------------|
