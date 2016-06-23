@@ -71,8 +71,10 @@ fi
 docker commit "$(cat ${TMP_FOLDER}/docif_tests.cid)" ${IMAGE_NAME_CI}:${COMMIT_SHA}
 rm -f "${TMP_FOLDER}/docif_tests.cid"
 
-if [ $EXIT -ne 0 ]; then
-	# Always pass this test (the other te
-	exit "$EXIT"
-fi
+echo "$EXIT" > "${TMP_FOLDER}/exit_code"
 
+# Enable if you want this script to match output
+# if [ $EXIT -ne 0 ]; then
+# 	# Always pass this test (if we don't pass this, we hit a bug in circle)
+# 	exit "$EXIT"
+# fi

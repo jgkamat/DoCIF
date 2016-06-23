@@ -69,12 +69,14 @@ ci_task() {
 			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
 			-H "Content-Type: application/json" \
 			-d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		RETURN="passed"
 	else
 		>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
 			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
 			-H "Content-Type: application/json" \
 			-d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
 		SUCCESS=false
+		RETURN="failed"
 	fi
 }
 
@@ -108,8 +110,11 @@ if [ "$PENDING" != "true" ]; then
 	sh -c "$CLEAN_COMMAND"
 fi
 
+TBL_RESULTS=""
 for i in "${TEST_COMMANDS[@]}"; do
+	RETURN="pending"
 	ci_task "$i"
+	TBL_RESULTS="$(printf "%s\n%s%s%s" "$TBL_RESULTS" "$i" ";" "$RETURN")"
 done
 
 # This script needs to be run prior with the --pending flag if you want to see pending flags
@@ -123,6 +128,11 @@ if [ "$FAIL_ALL_TESTS" = "true" ]; then
 	for i in "${SHORTNAMES[@]}"; do
 		fail_test ${i}
 	done
+fi
+
+if command -v column >/dev/null 2>&1; then
+	printf "\nResults:\n"
+	printf "%s\n" "$TBL_RESULTS" | column -t -s ';'
 fi
 
 if $SUCCESS; then
