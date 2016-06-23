@@ -13,7 +13,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # ENV LANG en_US.UTF-8
 
 # setup apt tools and other goodies we want
-RUN apt-get update --fix-missing && apt-get -y install apt-utils wget curl iputils-ping vim-nox debconf-utils git software-properties-common sudo && apt-get clean
+RUN apt-get update --fix-missing && apt-get -y install apt-utils wget curl iputils-ping vim-nox debconf-utils git software-properties-common bsdmainutils sudo && apt-get clean
 
 # This image is not meant to be run directly, it has not been compiled yet!
 # In addition, it does not contain any source code, only dependencies

@@ -130,8 +130,10 @@ if [ "$FAIL_ALL_TESTS" = "true" ]; then
 	done
 fi
 
-printf "\nResults:\n"
-printf "%s\n" "$TBL_RESULTS" | column -t -s ';'
+if command -v column >/dev/null 2>&1; then
+	printf "\nResults:\n"
+	printf "%s\n" "$TBL_RESULTS" | column -t -s ';'
+fi
 
 if $SUCCESS; then
 	exit 0
