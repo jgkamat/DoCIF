@@ -69,7 +69,7 @@ DoCIF projects build in several steps internally, and it helps to know the forma
 |---------------------------+-------+--------------------------------+------------------------------------------|
 | Variable Name             | Type  | Example                        | Notes                                    |
 |---------------------------+-------+--------------------------------+------------------------------------------|
-| ~PENDING_URL~             | Var   | http://www.some-website.com    | The link docif will point to when tests are pending |
+| ~PENDING_URL~             | Var   | http://www.jgkamat.github.io   | The link docif will point to when tests are pending |
 | ~DOCKER_PASSWORD_VAR~     | Ptr   | ~DOCKER_PASS~                  | A pointer to your password. For this example, you would set ~DOCKER_PASS~ as your password. |
 | ~DOCKER_EMAIL_VAR~        | Ptr   | ~DOCKER_EMAIL~                 | A pointer to your email. For this example, you would set ~DOCKER_EMAIL~ as your email. |
 | ~DOCKER_USER_VAR~         | Ptr   | ~DOCKER_USER~                  | A pointer to your username. For this example, you would set ~DOCKER_USER~ as your username. |

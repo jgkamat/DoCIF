@@ -7,6 +7,6 @@
 
 * DoCIF Documentation
 
-Welcome to the DoCIF documentation. Please click the links below to find what you're looking for
+Welcome to the DoCIF documentation. Please click the links below to find what you're looking for!
 
 - [[file:docif_config.org][Documentation of Config Options]]
