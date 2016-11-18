@@ -24,6 +24,10 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
   * Ability to supply your own dockerfile to do this. Be careful though, you could break some things.
   * [DoCIF's tests are run using DoCIF](https://github.com/jgkamat/DoCIF/pull/4). Yes it was hard. It's also a good example of the end result from your point of view.
 
+## Documentation
+
+Below, you will find a simple setup guide, buf if you need additional clarification or help with advanced usage, check out the [docs folder of this repo](./doc/index.org)
+
 ## Setup
 Setup of DoCIF is designed to be easy, assuming you know how to set up your project on a linux machine!
 

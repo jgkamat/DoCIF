@@ -1,0 +1,12 @@
+
+
+#+AUTHOR: Jay Kamat
+#+EMAIL: jaygkamat@gmail.com
+
+# This is the landing page for docs
+
+* DoCIF Documentation
+
+Welcome to the DoCIF documentation. Please click the links below to find what you're looking for!
+
+- [[file:docif_config.org][Documentation of Config Options]]
