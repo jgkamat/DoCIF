@@ -5,17 +5,16 @@ DIR=$(cd $(dirname $0) ; pwd -P)
 source ${DIR}/../util/docker_common.sh
 
 
-if [ -n "${CACHING_SHA:-}" ] && curl -s https://registry.hub.docker.com/v1/repositories/${BASEIMAGE_REPO}/tags/${CACHING_SHA} \
-	-o /dev/null -w "%{http_code}" | fgrep -q '200'; then
-	echo "[INFO] Cached baseimage found, pulling from ${BASEIMAGE_REPO}:${CACHING_SHA}"
-	# The tag currently exists, and can be pulled
-	docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}
+if [ -n "${CACHING_SHA:-}" ] && \
+	   echo "[INFO] Attempting pull from ${BASEIMAGE_REPO}:${CACHING_SHA}" && \
+	   docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}; then
+	echo "[INFO] Image ${BASEIMAGE_REPO}:${CACHING_SHA} was successfully pulled!"
 else
 	# The tag does not exist, let's build it!
 	if [ -z "${CACHING_SHA:-}" ]; then
 		echo "[INFO] Caching sha not found. Make sure you have SHA files for us to SHA."
 	else
-		echo "[INFO] Cached baseimage ${BASEIMAGE_REPO}:${CACHING_SHA} not found. Building a new image."
+		echo "[INFO] Cached baseimage ${BASEIMAGE_REPO}:${CACHING_SHA} not found or failed pull. Building a new image."
 	fi
 
 	set +e
@@ -35,11 +34,11 @@ else
 		set +e
 
 		docker run \
-			--cidfile="${TMP_FOLDER}/docif_baseimage.cid" \
-			$(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
-			$(eval echo \"$(${DIR}/../util/docker_common.sh print_environment_flags)\") \
-			-v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} ${BASEIMAGE_REPO}:in_progress \
-			sh -c "${SETUP_COMMAND}"
+			   --cidfile="${TMP_FOLDER}/docif_baseimage.cid" \
+			   $(eval echo \"$(${DIR}/../util/docker_common.sh print_cache_flags)\") \
+			   $(eval echo \"$(${DIR}/../util/docker_common.sh print_environment_flags)\") \
+			   -v ${PROJECT_ROOT}:${GIT_CLONE_ROOT} ${BASEIMAGE_REPO}:in_progress \
+			   sh -c "${SETUP_COMMAND}"
 		if [ $? -ne 0 ]; then
 			echo "[ERR] Your setup command FAILED. Exiting..." >&2
 			${DOCIF_ROOT}/util/maketest.sh --fail
