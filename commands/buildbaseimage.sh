@@ -7,7 +7,7 @@ source ${DIR}/../util/docker_common.sh
 
 if [ -n "${CACHING_SHA:-}" ] && \
 	   echo "[INFO] Attempting pull from ${BASEIMAGE_REPO}:${CACHING_SHA}" && \
-	   docker pull ${BASEIMAGE_REPO}:${CACHING_SHA}; then
+	   docker pull ${BASEIMAGE_REPO}:${CACHING_SHA} >/dev/null; then
 	echo "[INFO] Image ${BASEIMAGE_REPO}:${CACHING_SHA} was successfully pulled!"
 else
 	# The tag does not exist, let's build it!
