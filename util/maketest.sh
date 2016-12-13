@@ -56,8 +56,10 @@ ci_task() {
 	fi
 
 
-	eval "${CMD}" 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
-	CMD_STATUS=${PIPESTATUS[0]}
+	set -o pipefail
+	bash -c "${CMD} 2>&1 | tee \"${ARTIFACT_DIR}/${SHORTNAME}.txt\""
+	CMD_STATUS=${?}
+	set +o pipefail
 
 	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
 		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
