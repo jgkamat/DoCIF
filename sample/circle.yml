@@ -7,15 +7,15 @@ machine:
     # API tokens pushed to repositories for security reasons, so we split it in
     # half as a workaround.  This is only very minor security risk b/c this
     # token only allows access to change commit statuses.
-    GITHUB_HAS_GREAT_SECURITY: e55b95c725c15522d07
-    GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}3fae64362ab4b07477304
-    GH_EMAIL: github@jgkamat.33mail.com
+    GITHUB_HAS_GREAT_SECURITY: token1
+    GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}token2
+    GH_EMAIL: my@gmail.com
     GH_USER: jgkamat
 
 checkout:
   post:
 	  # Make sure that submodules are really, truly up to date
-    - git submodule sync && - git submodule update --init || true && git submodule sync && git submodule update --init
+    - git submodule sync && - git submodule update --init
 
 dependencies:
   pre:
