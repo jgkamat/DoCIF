@@ -1,5 +1,5 @@
 # You can change this to any version of ubuntu with little consequence
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Jay Kamat jaygkamat@gmail.com
 
 # This dockerimage will serve as a 'static' base for using the DoCIF project

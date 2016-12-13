@@ -42,7 +42,7 @@ run_in_project() {
 
 # Checks to see if a variable is empty or not
 check_variable() {
-	if [ -z "$(eval echo "\$${1}")" ]; then
+	if [ -z "${!1:-}" ]; then
 		echo "[ERR] $1 was missing from your config file. DoCIF cannot continue." >&2
 		exit 1
 	fi
@@ -120,12 +120,12 @@ print_cache_flags() {
 # This converts our secrets to standard variables we can use throughout DoCIF
 standardize_env_vars() {
 	# Any of these could be empty if you wanted, that turns off features though.
-	DOCKER_PASSWORD="$(eval echo "\$${DOCKER_PASSWORD_VAR}")"
-	DOCKER_EMAIL="$(eval echo "\$${DOCKER_EMAIL_VAR}")"
-	DOCKER_USERNAME="$(eval echo "\$${DOCKER_USER_VAR}")"
-	GH_STATUS_TOKEN="$(eval echo "\$${GH_STATUS_TOKEN_VAR}")"
-	GH_USERNAME="$(eval echo "\$${GH_USER_VAR}")"
-	GH_EMAIL="$(eval echo "\$${GH_EMAIL_VAR}")"
+	DOCKER_PASSWORD="${!DOCKER_PASSWORD_VAR:-}"
+	DOCKER_EMAIL="${!DOCKER_EMAIL_VAR:-}"
+	DOCKER_USERNAME="${!DOCKER_USER_VAR:-}"
+	GH_STATUS_TOKEN="${!GH_STATUS_TOKEN_VAR:-}"
+	GH_USERNAME="${!GH_USER_VAR:-}"
+	GH_EMAIL="${!GH_EMAIL_VAR:-}"
 	PENGING_URL="${PENDING_URL:-"https://github.com/jgkamat/DoCIF"}"
 	CLEAN_COMMAND="${CLEAN_COMMAND:-"true"}"
 	PUSH_BASEIMAGE="${PUSH_BASEIMAGE:-"false"}"
