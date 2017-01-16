@@ -1,0 +1,21 @@
+
+#+AUTHOR: Jay Kamat
+#+EMAIL: jaygkamat@gmail.com
+
+* Examples
+
+This page will track known projects using DoCIF. Having examples is very helpful
+when setting up your own DoCIF projects, as you can take a look at the
+configuration settings that others are doing!
+
+Feel free to add your own project once you're done with setup in a PR!
+
+* Projects
+
+- [[https://github.com/RoboJackets/robocup-software][RoboJackets/robocup-software]]
+  - robocup-firmware uses DoCIF as well.
+- [[https://github.com/RoboJackets/igvc-software][RoboJackets/igvc-software]]
+- [[https://github.com/RoboJackets/roboracing-software][RoboJackets/roboracing-software]]
+- [[https://github.com/gtagency/buzzmobile][gtagency/buzzmobile]]
+- [[https://github.com/jgkamat/TIS-99][jgkamat/TIS-99]]
+- [[https://github.com/jgkamat/DoCIF][jgkamat/DoCIF]]

@@ -11,3 +11,4 @@ Welcome to the DoCIF documentation. Please click the links below to find what yo
 
 - [[file:setup.org][Setup Guide]]
 - [[file:docif_config.org][Documentation of Config Options]]
+- [[file:examples.org][Examples of Projects Using DoCIF]]
