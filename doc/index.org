@@ -9,4 +9,5 @@
 
 Welcome to the DoCIF documentation. Please click the links below to find what you're looking for!
 
+- [[file:setup.org][Setup Guide]]
 - [[file:docif_config.org][Documentation of Config Options]]

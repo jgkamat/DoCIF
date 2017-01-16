@@ -1,0 +1,27 @@
+
+#+AUTHOR: Jay Kamat
+#+EMAIL: jaygkamat@gmail.com
+
+# This is a docs page going over the basic setup of a DoCIF project.
+
+* DoCIF Overview
+
+DoCIF is the Docker Continuous Integration Framework.
+
+Docker is a pretty cool technology, and it has enormous potential for making
+testing much easier, but in practice, using docker is much harder than it sounds
+for anything but the simplest setups. DoCIF aims to make setting up a new
+project easier, both for newcomers and those who are seasoned docker testers!
+
+Running testing in docker lets you:
+
+1. Get the /exact/ build environment you want.
+2. Ensure tests /always/ run in a clean environment (if you wish).
+3. Allow saving state of any completed test so developers can reproduce an issue.
+4. Cache images to the docker hub or your private registry (reducing dependency
+   install times)
+
+If you want to skip to setup, please go [[*Simple Setup][Here]]
+
+* DoCIF Architecture
+* Simple Setup
