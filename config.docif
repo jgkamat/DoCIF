@@ -103,6 +103,7 @@ TEST_COMMANDS+=( 'echo "hello world" && echo "goodbye";test-ands;Test if we can 
 TEST_COMMANDS+=( 'true && [ "root" = "`whoami`" ];test-complex;Test if we can handle complex bash commands (in tests)' )
 TEST_COMMANDS+=( '[ "hello_world"="$TEST_ENV_VARS" ];test-external-vars;Test if external variables make it into the container' )
 TEST_COMMANDS+=( 'cd /bin && [ -e bash ];test-cd-dir;Test if a cd command works' )
+TEST_COMMANDS+=( 'ps aux --sort=-%mem | awk '"'"'NR<=10{print $0}'"'"';test-supercomplex;Test if this supercomplex command prints memory usage' )
 
 # @RECOMMENDED
 # Clean command. Cleans the build files so there is no way the previous build can interfere. Add if you run
