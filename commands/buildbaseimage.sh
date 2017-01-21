@@ -56,7 +56,7 @@ else
 		rm -f "${TMP_FOLDER}/docif_baseimage.cid"
 	else
 		echo "[WARN] No setup command was supplied. Using bare baseimage environment." >&2
-		docker tag -f ${BASEIMAGE_REPO}:in_progress ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
+		docker tag ${BASEIMAGE_REPO}:in_progress ${BASEIMAGE_REPO}:${CACHING_SHA:-latest}
 	fi
 
 	if [ -n "$DOCKER_PASSWORD" -a -n "$DOCKER_EMAIL" -a -n "$DOCKER_USERNAME" ]; then
@@ -86,4 +86,4 @@ else
 	fi
 fi
 
-docker tag -f ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} ${BASEIMAGE_REPO}:current
+docker tag ${BASEIMAGE_REPO}:${CACHING_SHA:-latest} ${BASEIMAGE_REPO}:current
