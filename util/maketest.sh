@@ -88,11 +88,17 @@ elif [ "$1" = "--fail" ]; then
 	FAIL_ALL_TESTS=true
 fi
 
-OLD_PWD="$(pwd)"
-cd ${GIT_CLONE_ROOT}
-# TODO figure out if we really need this. This really should be done before DoCIF even runs.
-git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
-cd ${OLD_PWD}
+if [ "$PENDING" != "true" ]; then
+	# If we are in the container, go to the git root
+	OLD_PWD="$(pwd)"
+	cd ${GIT_CLONE_ROOT}
+	# TODO figure out if we really need this. This really should be done before DoCIF even runs.
+	git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
+	cd ${OLD_PWD}
+else
+	# If we are in the host, just go for it (we're already at the git root)
+	git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
+fi
 
 # Go to root so we can make.
 if [ "$PENDING" != "true" ]; then
