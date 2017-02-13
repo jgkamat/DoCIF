@@ -88,6 +88,12 @@ elif [ "$1" = "--fail" ]; then
 	FAIL_ALL_TESTS=true
 fi
 
+OLD_PWD="$(pwd)"
+cd ${GIT_CLONE_ROOT}
+# TODO figure out if we really need this. This really should be done before DoCIF even runs.
+git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
+cd ${OLD_PWD}
+
 # Go to root so we can make.
 if [ "$PENDING" != "true" ]; then
 	# We don't want to CD during the pending phase, as we are not in the docker container yet
@@ -95,7 +101,6 @@ if [ "$PENDING" != "true" ]; then
 fi
 
 # Clean
-git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
 for i in "${CACHE_DIRECTORIES[@]}"; do
 	i="$(echo $i | sed 's/~/${HOME}/')"		# Sanitize i
 	i="$(eval echo "$i")"
