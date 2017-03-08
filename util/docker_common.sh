@@ -143,6 +143,12 @@ standardize_env_vars() {
 	else
 		DOCKERFILE="${PROJECT_ROOT}/${CUSTOM_DOCKERFILE}"
 	fi
+
+	# Clear null entries in CACHE_DIRECTORIES
+	# TODO, do other arrays need this too?
+	for i in "${!CACHE_DIRECTORIES[@]}"; do
+		[ -n "${CACHE_DIRECTORIES[$i]}" ] || unset "CACHE_DIRECTORIES[$i]"
+	done
 }
 
 standardize_env_vars
