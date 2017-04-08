@@ -17,9 +17,15 @@ PENDING=false
 FAIL_ALL_TESTS=false
 SHORTNAMES=( )
 
+if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
+	echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
+	SEND_STATUS_TOKENS=false
+else
+	SEND_STATUS_TOKENS=true
+fi
+
 start_pending() {
-	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
-		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
+	if $SEND_STATUS_TOKENS; then
 		return 0
 	fi
 
@@ -31,8 +37,7 @@ start_pending() {
 }
 
 fail_test() {
-	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
-		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
+	if $SEND_STATUS_TOKENS; then
 		return 0
 	fi
 
@@ -61,23 +66,24 @@ ci_task() {
 	CMD_STATUS=${?}
 	set +o pipefail
 
-	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
-		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
-		return 0
-	fi
-
 	if [ "${CMD_STATUS}" = "0" ]; then
-		>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-			-H "Content-Type: application/json" \
-			-d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		if $SEND_STATUS_TOKENS; then
+			>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
+			 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+			 -H "Content-Type: application/json" \
+			 -d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		fi
 		RETURN="passed"
 	else
-		>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-			-H "Content-Type: application/json" \
-			-d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		if $SEND_STATUS_TOKENS; then
+			>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
+			 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+			 -H "Content-Type: application/json" \
+			 -d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		fi
+		# Fail all tests once completed
 		SUCCESS=false
+
 		RETURN="failed"
 	fi
 }
