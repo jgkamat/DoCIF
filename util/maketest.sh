@@ -25,7 +25,7 @@ else
 fi
 
 start_pending() {
-	if $SEND_STATUS_TOKENS; then
+	if ! $SEND_STATUS_TOKENS; then
 		return 0
 	fi
 
@@ -37,7 +37,7 @@ start_pending() {
 }
 
 fail_test() {
-	if $SEND_STATUS_TOKENS; then
+	if ! $SEND_STATUS_TOKENS; then
 		return 0
 	fi
 
@@ -61,10 +61,8 @@ ci_task() {
 	fi
 
 
-	set -o pipefail
-	bash -c "${CMD} 2>&1 | tee \"${ARTIFACT_DIR}/${SHORTNAME}.txt\""
-	CMD_STATUS=${?}
-	set +o pipefail
+	${CMD} 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
+	CMD_STATUS=${PIPESTATUS[0]}
 
 	if [ "${CMD_STATUS}" = "0" ]; then
 		if $SEND_STATUS_TOKENS; then
