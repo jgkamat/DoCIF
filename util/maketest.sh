@@ -61,7 +61,7 @@ ci_task() {
 	fi
 
 
-	${CMD} 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
+	bash -c "${CMD} 2>&1" | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
 	CMD_STATUS=${PIPESTATUS[0]}
 
 	if [ "${CMD_STATUS}" = "0" ]; then
