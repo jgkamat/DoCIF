@@ -91,3 +91,75 @@ dependency stage. CircleCi allows for caching things in the dependency, but not
 the test stage, which you can take advantage of by setting ~$CACHE_DIRECTORIES~.
 
 * Simple Setup
+
+If you find yourself confused at any point, you can try and see DoCIF in action at any of the known [[file:examples.org][examples]] out there.
+
+** Repo Setup
+
+Create a repository for your project on github.
+
+[[https://github.com/new][This link]] takes you to the repository creation screen.
+
+[[file:https://i.imgur.com/3px5cO0.png]]
+
+** Clone and Install DoCIF
+
+This step will install/setup DoCIF in your repo. We will also configure DoCIF to tell it what to run.
+
+*** Install Default Config Files
+
+Run the following commands to clone and setup your new DoCIF repository
+
+#+BEGIN_SRC shell
+git clone https://github.com/<YOUR USERNAME>/<YOUR GITHUB PROJECT>.git
+cd <YOUR GITHUB PROJECT>
+
+# Install DoCIF by cloning it as a submodule
+git submodule add https://github.com/jgkamat/DoCIF.git
+
+# Help on submodules: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+# New cloners will need to run git submodule update --init if they need DoCIF (they shouldn't normally)
+
+# Copy example starter files into your project
+cp DoCIF/sample/circle.yml .
+cp DoCIF/sample/config.docif .
+#+END_SRC
+
+*** Adding repo-specific settings
+
+Open up the ~./config.docif~ file in your repository, and skim over the options provided there. The configuration file is entirely bash, and values are changed via setting bash 4 environment variables.
+
+You *must* edit any option titled ~@REQUIRED~, and you should take a look at any option labeled ~@RECCOMENDED~.
+
+Some of the ~@REQUIRED~ options are:
+
+| ~BASEIMAGE_REPO~ | A dockerhub repo to cache to. If you set ~PUSH_BASEIMAGE~ to false, you can leave this blank (or ignore it)                                       |
+| ~GITHUB_REPO~   | A github repo in ~username/repo~ format. This is used to update status tokens. You can leave this blank if you don't want per-test status tokens. |
+| ~TEST_COMMANDS~ | A bash array of tests to run, sepereated with ~;~, in a ~command;test-name;description~ format. ~test-name~ must be unique for every test.        |
+
+~TEST_COMAMNDS~ is 'make' by default, and you should change it to a different command you want to test.
+
+Once you are happy with the config options here, commit, push to your repo, and proceed to the next step. More advanced configuration options are documented in more detail [[file:docif_config.org][here]].
+** Enable CircleCI
+
+DoCIF has the best support for CircleCI, and we will be setting that up for our sample project.
+
+1. Go to [[https://www.circleci.com][circleci.com]], register for an account, and login with github.
+2. Click =build-project= on the project you are testing.
+
+  [[file:https://i.imgur.com/rowEAvt.png]]
+3. Watch your build run, and ideally pass.
+   - If your build does not pass, try to look at the output for warnings or errors that can help you pin down the problem. You can also try submitting a help issue to jgkamat/DoCIF.
+4. Once your build is passing, feel free to try out more advanced configuration!
+
+** Wrapping Up
+
+A completed example of the above procedure [[https://github.com/jgkamat/DoCIF-example][is here!]]
+
+While this is a fully functional DoCIF project, it not taking advantage of any of the features that DoCIF provides, such as multi status publishing to GitHub, docker baseimage caching, folder caching, and custom environments.
+
+* Further steps
+
+1. Read the [[file:docif_config.org][configuration options documentation]].
+2. View some [[file:examples.org][working examples of advanced projects]].
+3. =(IN PROGRESS)= Follow future tutorials to setup more advanced features of DoCIF
