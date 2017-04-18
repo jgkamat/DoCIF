@@ -24,8 +24,8 @@ dependencies:
     - ./DoCIF/commands/buildbaseimage.sh
       # Actually the test step, but we want to cache it so it can go here.
     - ./DoCIF/commands/runtests.sh
-  cache_directories:
-    - ~/.ccache # See $CACHE_DIRECTORIES in sample_config.docif
+  # cache_directories:
+  #   - ~/.ccache # See $CACHE_DIRECTORIES in sample_config.docif
 
 # The test phase dosen't actually run tests. We need the caching from the deploy step.
 test:
