@@ -5,17 +5,18 @@
 # This is just a shell file that is sourced by DoCIF scripts.
 
 # @REQUIRED
-# A docker baseimage repostiory. Create one on the docker hub
-BASEIMAGE_REPO="jgkamat/vipaint-baseimage"
+# A docker baseimage repostiory. You can create one on the docker hub
+BASEIMAGE_REPO="dockerhub_username/dockerhub_repo"
 
+# @RECCOMENDED
 # If true, ${BASEIMAGE_REPO}:master is pushed when on master.
 # Defaults to false.
-PUSH_BASEIMAGE="true"
+PUSH_BASEIMAGE="false"
 
 # @REQUIRED
 # The github repository location, for sending status updates to
-# This is CASE SENSITIVE!!
-GITHUB_REPO='jgkamat/ViPaint'
+# This is CASE SENSITIVE.
+GITHUB_REPO='github_username/github_project'
 
 # The url to point to when a status check is pending.
 # Will point to https://github.com/jgkamat/DoCIF if unset.
@@ -41,7 +42,7 @@ DOCKER_USER_VAR="DOCKER_USER"
 
 # Status token is used for updating status
 GH_STATUS_TOKEN_VAR="GH_STATUS"
-# Variable holing the username of the Status Token
+# Variable holding the username of the Status Token
 GH_USER_VAR="GH_USER"
 # Variable holing the email of the Status Token
 GH_EMAIL_VAR="GH_EMAIL"
@@ -59,7 +60,7 @@ GH_EMAIL_VAR="GH_EMAIL"
 # The git clone root INSIDE THE DOCKER CONTAINER
 # GIT_CLONE_ROOT="${DOCKER_PROJECT_ROOT}"
 
-################################################################################
+################################# DIRECTORIES ##################################
 
 # Cache directories, not required.
 # Directories to link to the docker container for each build and persist between builds. Add to circle.yml as well.
@@ -67,14 +68,14 @@ GH_EMAIL_VAR="GH_EMAIL"
 # YOU MUST USE ~ IN YOUR PATH (NO $HOME), SO WE KNOW WHERE TO LINK TO INSIDE THE CONTAINER.
 # This directory MUST BE ADDED TO circle.yml AS WELL IN ORDER FOR ACTUAL CACHING TO TAKE PLACE
 CACHE_DIRECTORIES=()
-CACHE_DIRECTORIES+=('~/.ccache')
+# CACHE_DIRECTORIES+=('~/.ccache')
 
 
 ################################# COMMANDS #####################################
 
 # The script to set up the environment, by default ubuntu.
 # YOU WILL NEED TO USE SUDO TO GET ROOT PRIVILEGES HERE
-SETUP_COMMAND="sudo apt-get update && sudo apt-get -y install emacs"
+SETUP_COMMAND="sudo apt-get update && sudo apt-get -y install vim"
 # SETUP_COMMAND="./ubuntu-setup-script"
 
 # DOCIF can cache baseimages, if you give it files that will force a rebuild if changed.
@@ -83,7 +84,7 @@ SETUP_COMMAND="sudo apt-get update && sudo apt-get -y install emacs"
 SETUP_SHA_FILES=()
  # This file should be included unless you leave this variable completely blank, forcing a rebuild when DoCIF is updated
 SETUP_SHA_FILES+=("./.gitmodules")
-SETUP_SHA_FILES+=("./sample-config.docif")
+SETUP_SHA_FILES+=("./config.docif")
 
 # @REQUIRED
 # Commands to run when testing. Each index will have its own status token
@@ -91,7 +92,7 @@ SETUP_SHA_FILES+=("./sample-config.docif")
 # COMMAND; SHORT_NAME; DESCRIPTION
 TEST_COMMANDS=()
 TEST_COMMANDS+=( 'make;compile;A test to see if the code compiles' )
-TEST_COMMANDS+=( 'make test-cpp;test-cpp;A test to see if the code passes cpp tests' )
+# TEST_COMMANDS+=( 'make run;test-running;A test to see if the code runs' )
 
 # @RECCOMENDED
 # Clean command. Cleans the build files so there is no way the previous build can interfere. Add if you run

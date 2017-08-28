@@ -17,9 +17,15 @@ PENDING=false
 FAIL_ALL_TESTS=false
 SHORTNAMES=( )
 
+if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
+	echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
+	SEND_STATUS_TOKENS=false
+else
+	SEND_STATUS_TOKENS=true
+fi
+
 start_pending() {
-	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
-		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
+	if ! $SEND_STATUS_TOKENS; then
 		return 0
 	fi
 
@@ -31,8 +37,7 @@ start_pending() {
 }
 
 fail_test() {
-	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
-		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
+	if ! $SEND_STATUS_TOKENS; then
 		return 0
 	fi
 
@@ -56,26 +61,27 @@ ci_task() {
 	fi
 
 
-	eval "${CMD}" 2>&1 | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
+	bash -c "${CMD} 2>&1" | tee "${ARTIFACT_DIR}/${SHORTNAME}.txt"
 	CMD_STATUS=${PIPESTATUS[0]}
 
-	if [ -z "$GH_USERNAME" -o -z "$GH_STATUS_TOKEN" ]; then
-		echo "[WARN] GH_STATUS TOKEN or USERNAME empty. Not updating statuses." >&2
-		return 0
-	fi
-
 	if [ "${CMD_STATUS}" = "0" ]; then
-		>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-			-H "Content-Type: application/json" \
-			-d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		if $SEND_STATUS_TOKENS; then
+			>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
+			 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+			 -H "Content-Type: application/json" \
+			 -d '{"state":"success", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		fi
 		RETURN="passed"
 	else
-		>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
-			-X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
-			-H "Content-Type: application/json" \
-			-d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		if $SEND_STATUS_TOKENS; then
+			>/dev/null curl -s -u $GH_USERNAME:$GH_STATUS_TOKEN \
+			 -X POST https://api.github.com/repos/${GITHUB_REPO}/statuses/${COMMIT_SHA} \
+			 -H "Content-Type: application/json" \
+			 -d '{"state":"failure", "description": '"\"${DESCRIPTION}\""', "context": '"\"circle/${SHORTNAME}\""', "target_url": '""\"${LINK_PREFIX}${SHORTNAME}.txt\""}"
+		fi
+		# Fail all tests once completed
 		SUCCESS=false
+
 		RETURN="failed"
 	fi
 }
@@ -86,6 +92,18 @@ elif [ "$1" = "--fail" ]; then
 	FAIL_ALL_TESTS=true
 fi
 
+if [ "$PENDING" != "true" ]; then
+	(
+		# If we are in the container, go to the git root
+		cd ${GIT_CLONE_ROOT}
+		# TODO figure out if we really need this. This really should be done before DoCIF even runs.
+		git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
+	)
+else
+	# If we are in the host, just go for it (we're already at the git root)
+	git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
+fi
+
 # Go to root so we can make.
 if [ "$PENDING" != "true" ]; then
 	# We don't want to CD during the pending phase, as we are not in the docker container yet
@@ -93,7 +111,6 @@ if [ "$PENDING" != "true" ]; then
 fi
 
 # Clean
-git submodule sync && git submodule update --init || true && git submodule sync && git submodule update --init
 for i in "${CACHE_DIRECTORIES[@]}"; do
 	i="$(echo $i | sed 's/~/${HOME}/')"		# Sanitize i
 	i="$(eval echo "$i")"

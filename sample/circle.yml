@@ -7,15 +7,15 @@ machine:
     # API tokens pushed to repositories for security reasons, so we split it in
     # half as a workaround.  This is only very minor security risk b/c this
     # token only allows access to change commit statuses.
-    GITHUB_HAS_GREAT_SECURITY: e55b95c725c15522d07
-    GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}3fae64362ab4b07477304
-    GH_EMAIL: github@jgkamat.33mail.com
-    GH_USER: jgkamat
+    GITHUB_HAS_GREAT_SECURITY: token1
+    GH_STATUS: ${GITHUB_HAS_GREAT_SECURITY}token2
+    GH_EMAIL: my@gmail.com
+    GH_USER: your_github_username
 
 checkout:
   post:
-	  # Make sure that submodules are really, truly up to date
-    - git submodule sync && - git submodule update --init || true && git submodule sync && git submodule update --init
+    # Make sure that submodules are really, truly up to date
+    - git submodule sync && git submodule update --init
 
 dependencies:
   pre:
@@ -24,8 +24,8 @@ dependencies:
     - ./DoCIF/commands/buildbaseimage.sh
       # Actually the test step, but we want to cache it so it can go here.
     - ./DoCIF/commands/runtests.sh
-  cache_directories:
-    - ~/.ccache # See $CACHE_DIRECTORIES in sample_config.docif
+  # cache_directories:
+  #   - ~/.ccache # See $CACHE_DIRECTORIES in sample_config.docif
 
 # The test phase dosen't actually run tests. We need the caching from the deploy step.
 test:

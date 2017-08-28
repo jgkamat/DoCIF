@@ -1,3 +1,0 @@
-[submodule ".testing"]
-	path = .testing
-	url = https://gitlab.com/jgkamat/docif-testing.git

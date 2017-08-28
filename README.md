@@ -2,7 +2,7 @@
 
 Docker Continuous Integration Framework - A framework for easily testing your project with Docker!
 
-###DoCIF is in Release Candidate. Please help out to test for bugs before the first release!
+### DoCIF is in Release Candidate. Please help out to test for bugs before the first release!
 
 DoCIF is a framework making it easy to test your project with Docker. You only need to configure DoCIF, and DoCIF will handle building docker images, caching using the docker hub, and github status updates!
 
@@ -12,7 +12,7 @@ DoCIF was originally made for [RoboJackets/robocup-software](https://www.github.
 ## Requirements
 * Git managed project and `git 2.0+`
 * [Docker](https://www.docker.com) installed on your system or continuous integration
-* Bash on a POSIX (preferrably GNU) system.
+* Bash 4+ on a POSIX (preferrably GNU) system.
 * CircleCi Continuous Integration. The features included in DoCIF take adavantage of its features, such as artifact deployment, and caching.
 
 ## Features
