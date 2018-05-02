@@ -1,8 +1,14 @@
+# DoCIF Is Deprecated
+
+Due to the [deprecation of CircleCI 1.0](https://circleci.com/blog/sunsetting-1-0/), DoCIF will no longer work. Because of the lack of properly pipeline container builds and the loss of direct access to docker, the DoCIF workflow cannot be ported over to CircleCI 2.0.
+
+However, you can combine docker hub automated builds with circleci workflows to get a somewhat similar end result. You can do this by building a "baseimage" from a Dockerfile at the root of your repo using Docker Hub automated builds, and then using that baseimage as your image in every stage of a 2.0 [pipeline](https://circleci.com/docs/2.0/workflows/). While build artifacts and additional dependencies cannot be trivially moved down the pipline anymore, this approach does have the advantage of being more parallelizable, and a similar performance to DoCIF on 1.0 can be reached with aggressive [caching](https://circleci.com/docs/2.0/caching/).
+
+DoCIF was a fun ride, and I hope to eventually reconstruct the same workflow again one day, maybe in Jenkins this time `:)`.
+
 # DoCIF [![Build Status](https://circleci.com/gh/jgkamat/DoCIF.svg?&style=svg)](https://circleci.com/gh/jgkamat/DoCIF)
 
 Docker Continuous Integration Framework - A framework for easily testing your project with Docker!
-
-### DoCIF is in Release Candidate. Please help out to test for bugs before the first release!
 
 DoCIF is a framework making it easy to test your project with Docker. You only need to configure DoCIF, and DoCIF will handle building docker images, caching using the docker hub, and github status updates!
 
