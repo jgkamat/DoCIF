@@ -1,8 +1,8 @@
 # DoCIF Is Deprecated
 
-Due to the [deprecation of CircleCI 1.0](https://circleci.com/blog/sunsetting-1-0/), DoCIF will no longer work. Because of the lack of properly pipeline container builds and the loss of direct access to docker, the DoCIF workflow cannot be ported over to CircleCI 2.0.
+Due to the [deprecation of CircleCI 1.0](https://circleci.com/blog/sunsetting-1-0/), DoCIF will no longer work. Because of the lack of properly pipelined container builds and the loss of direct access to docker, the DoCIF workflow cannot be ported over to CircleCI 2.0.
 
-However, you can combine docker hub automated builds with circleci workflows to get a somewhat similar end result. You can do this by building a "baseimage" from a Dockerfile at the root of your repo using Docker Hub automated builds, and then using that baseimage as your image in every stage of a 2.0 [pipeline](https://circleci.com/docs/2.0/workflows/). While build artifacts and additional dependencies cannot be trivially moved down the pipline anymore, this approach does have the advantage of being more parallelizable, and a similar performance to DoCIF on 1.0 can be reached with aggressive [caching](https://circleci.com/docs/2.0/caching/).
+However, you can combine docker hub automated builds with circleci workflows to get a somewhat similar end result. You can do this by building a "baseimage" from a Dockerfile at the root of your repo using Docker Hub automated builds, and then using that baseimage as your image in every stage of a 2.0 [pipeline](https://circleci.com/docs/2.0/workflows/). While build artifacts and additional dependencies cannot be trivially moved down the pipline anymore, this approach does have the advantage of being more parallelizable, and a similar performance to DoCIF on 1.0 can be reached with aggressive [caching](https://circleci.com/docs/2.0/caching/). An example of this setup is currently live at [robocup-software](https://github.com/RoboJackets/robocup-software).
 
 DoCIF was a fun ride, and I hope to eventually reconstruct the same workflow again one day, maybe in Jenkins this time `:)`.
 
